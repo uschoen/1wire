@@ -12,6 +12,7 @@ our %SYS=();   				# global configuration
 our $LOG;    				# loggin instance
 my $configFile="";
 my $daemon="false";
+my $run=0;
 
 GetOptions('configfile=s' => \$configFile,
 			"daemon=s"   => \$daemon)
@@ -55,6 +56,9 @@ if ( $SYS{daemon} eq "true" ) {
 	
 }	
 ### add logging
+use lib "./modul";
+use MultiLogger::Dispatcher;
+
 if (exists( $SYS{"logging"})) {
 	if (!($LOG =MultiLogger::Dispatcher->new($SYS{"logging"})))
 	{
@@ -90,7 +94,8 @@ sub readconfig
 	if ($config = eval {$xml->XMLin($file)}){
 		return $config;
 	}	
-	print "error, cant not read config file " . $file . "\n";
+	print "error, cant not read config file:" . $file . ":\n";
+	print "usag :$0 --configfile [path and filename] \n";
     exit(0);
 }
 #######################################################

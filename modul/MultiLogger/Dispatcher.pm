@@ -42,18 +42,18 @@ sub init
 	
 	$self->{'countLogObject'}=0;
 	
-	if (!(%ARGS)){
+	if (!($ARGS_ref)){
 		print "get no config for logging\n";
 		return 0;
 	}
-	if (!(exists($ARGS->{'output'}))){
+	if (!(exists($ARGS{'output'}))){
 		print "no output for logging\n";
 		return 0;	
 	}
 	
 	
 	#my $logger=MultiLogger::Dispatcher->new();
-	$ARGS->{'msgformat'}=sub {
+	$ARGS{'msgformat'}=sub {
 						my %p = @_;
 						(my $seconds, my $microseconds) = gettimeofday;
 						my @dta=gmtime($seconds);
@@ -64,7 +64,7 @@ sub init
 						my $string=sprintf("%04d.%02d.%02s %02d:%02d:%02d.%06d %-8s %6d %s\n",$dta[5],$dta[4],$dta[3],$dta[2],$dta[1],$dta[0],$microseconds,$p{'level'},$pid,$p{'message'});
 						return $string; 
 	};
-	my %outputs=%{$ARGS->{'output'}};
+	my %outputs=%{$ARGS{'output'}};
 	my $output;
 	
 	foreach $output ( keys %outputs){
@@ -75,11 +75,11 @@ sub init
 				my $loglevel="";
 				my $configOutput=$output2;
 				if (!(exists($configOutput->{'loglevel'}))){
-					$loglevel=$ARGS->{'loglevel'};
+					$loglevel=$ARGS{'loglevel'};
 				}else{
 					$loglevel=$configOutput->{'loglevel'};
 				}
-				$configOutput->{'msgformat'}=$ARGS->{'msgformat'};
+				$configOutput->{'msgformat'}=$ARGS{'msgformat'};
 				if (exists($configOutput->{'enable'})){
 					if ($configOutput->{'enable'} ne "true"){
 						next;
@@ -103,11 +103,11 @@ sub init
 			my $loglevel="";
 			my $configOutput=$outputs{$output};
 			if (!(exists($configOutput->{'loglevel'}))){
-				$loglevel=$ARGS->{'loglevel'};
+				$loglevel=$ARGS{'loglevel'};
 			}else{
 				$loglevel=$configOutput->{'loglevel'};
 			}
-			$configOutput->{'msgformat'}=$ARGS->{'msgformat'};
+			$configOutput->{'msgformat'}=$ARGS{'msgformat'};
 		
 			### file
 			if ($output eq "file"){
