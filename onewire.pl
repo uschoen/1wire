@@ -56,7 +56,7 @@ if ( $SYS{daemon} eq "true" ) {
 }	
 ### add logging
 if (exists( $SYS{"logging"})) {
-	if (!($LOG =&createLogging($SYS{"logging"})))
+	if (!($LOG =MultiLogger::Dispatcher->new($SYS{"logging"})))
 	{
     	print "can not create logging\n";
 		exit(0);
@@ -117,4 +117,4 @@ sub shutdown
 	&log("emergency","$0 get sig $! to shutdown ");
     exit (0);
 }  
-
+1;
