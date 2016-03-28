@@ -1,0 +1,72 @@
+#!/bin/sh
+### BEGIN INIT INFO
+# Provides:          1WireToHM
+# Required-Start:    $remote_fs $syslog
+# Required-Stop:     $remote_fs $syslog
+# Default-Start:     2 3 4 5
+# Default-Stop:      0 1 6
+# Short-Description: 1WireToHM
+# Description:       send Raspberry Pi 1wire Temp data to Homematic
+### END INIT INFO
+
+
+PATH=/usr/local/sbin:/usr/local/bin:/sbin:/bin:/usr/sbin:/usr/bin
+DAEMON_PATH="/usr/local/etc/onewire"
+DAEMON=$DAEMON_PATH/onewire.pl
+DAEMONOPTS="--configfile $DAEMON_PATH/conf/config.xml --daemon true"
+
+NAME=onewire
+PIDFILE=/var/run/$NAME.pid
+
+DESC="send Raspberry Pi 1wire Temp data to Homematic"
+SCRIPTNAME=/etc/init.d/$NAME
+
+
+binary=$DAEMON 
+
+[ -x $binary ] || exit 0
+
+RETVAL=0
+
+start() {
+    echo -n "Starting $NAME: "
+    /usr/bin/perl $DAEMON $DAEMONOPTS
+    RETVAL=$?
+    PID=$!
+    echo
+    [ $RETVAL -eq 0 ] && touch /var/lock/subsys/$NAME
+
+    #echo $PID > $PIDFILE
+}
+
+stop() {
+    echo -n "Shutting down $NAME: "
+    
+    kill `cat $PIDFILE`
+    rm -f $PIDFILE
+    
+}
+
+restart() {
+    echo -n "Restarting mytest: "
+    stop
+    sleep 2
+    start
+}
+
+case "$1" in
+    start)
+        start
+    ;;
+    stop)
+        stop
+    ;;
+    restart)
+        restart
+    ;;
+    *)
+        echo "Usage: $0 {start|stop|restart}"
+    ;;
+esac
+
+exit 0
