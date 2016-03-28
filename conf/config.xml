@@ -2,7 +2,19 @@
 <root>
 	<daemon>false</daemon>
 	<pidfile>/var/run/onewire.pid</pidfile>
-	<path></path>
+	<path>/mnt/nas01/entwicklung/1wire</path>
+	<wired_temp name="1 Wired Temperature" package="Raspberry" modul="wired1" enable="true">
+	   	<config>
+	   		<gpio_pin>4</gpio_pin>
+			<intervall>30</intervall>
+			<gpio_pin>4</gpio_pin>
+			<tempDiv>0.5</tempDiv>
+			<path>/sys/bus/w1/devices/w1_bus_master1/</path>
+			<slaves>w1_master_slaves</slaves>
+			<device_list>
+			</device_list>
+		</config>
+	</wired_temp>
 		<logging>
 		<loglevel>
 			<unkown>true</unkown>

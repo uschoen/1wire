@@ -12,7 +12,7 @@ our %SYS=();   				# global configuration
 our $LOG;    				# loggin instance
 my $configFile="";
 my $daemon="false";
-my $run=0;
+my $run=1;
 chdir "/";
 	
 GetOptions('configfile=s' => \$configFile,
@@ -41,10 +41,6 @@ if ( $SYS{daemon} eq "true" ) {
    		close PIDFILE;
 		exit (0);
 	}
-	$SIG{'PIPE'} = \&shutdown;
-	$SIG{'INT'}  = \&shutdown;
-	$SIG{'TERM'} = \&shutdown;
-	$SIG{'HUP'}  = \&shutdown;
 	umask 0;
 	foreach (0 .. (POSIX::sysconf (&POSIX::_SC_OPEN_MAX) || 1024))
 	{
@@ -54,7 +50,12 @@ if ( $SYS{daemon} eq "true" ) {
 	open (STDOUT, ">/dev/null");
 	open (STDERR, ">&STDOUT");
 	
-}	
+}
+$SIG{'PIPE'} = \&shutdown;
+$SIG{'INT'}  = \&shutdown;
+$SIG{'TERM'} = \&shutdown;
+$SIG{'HUP'}  = \&shutdown;
+		
 ### add logging
 use lib "./modul";
 use MultiLogger::Dispatcher;
@@ -68,12 +69,42 @@ if (exists( $SYS{"logging"})) {
 }
 ### Start up
 
-&log("info","start up easyHMC with PID " . $$ );	
+&log("info","start up $0 with PID " . $$ );	
 	
 
 while ($run){
-	
-	
+	### create module
+	my %Module={};
+	my %args=%{$SYS{'onewire'}{'config'}};
+	$args{'log'}=$LOG;
+	&log("info","build onewire modul" . $$ );
+	$Module{'onewire'}=new Raspberry::onewier(%args); 	
+
+	 
+	while ()
+	{
+		### read devices
+		my %args=%{$SYS{'onewire'}{'config'}};
+		$args{'log'}=$LOG;
+		$Module{'onewired'}->init_args(%args);
+		
+		my $nextcheck= time();
+		while ()
+		{
+			### read value
+			if ($nextcheck>time())
+			{
+				sleep(1);
+				next;
+			}
+			$nextcheck= time()+$SYS{'intervall'};
+		
+		}
+	}
+
+	&log("error","$0 restarts" . $$ );
+	%Module={};
+	sleep(1);
 }
 
 
@@ -120,6 +151,7 @@ sub shutdown
 #######################################################
 {
 	&log("emergency","$0 get sig $! to shutdown ");
+	$run=0;
     exit (0);
 }  
 1;

@@ -1,2 +1,8 @@
-2016.03.28 12:17:56.861113 info      12832 Filelog create new file
-2016.03.28 12:17:56.864655 info      12832 main ./onewire.pl 71->> start up easyHMC with PID 12832
+2016.03.28 16:35:21.774141 info      13024 Filelog create new file
+2016.03.28 16:35:21.777765 info      13024 main ./onewire.pl 72->> start up ./onewire.pl with PID 13024
+2016.03.28 16:35:21.786864 info      13024 main ./onewire.pl 79->> sleep 1 ./onewire.pl with PID 13024
+2016.03.28 16:35:22.793914 info      13024 main ./onewire.pl 79->> sleep 1 ./onewire.pl with PID 13024
+2016.03.28 16:35:23.803179 info      13024 main ./onewire.pl 79->> sleep 1 ./onewire.pl with PID 13024
+2016.03.28 16:35:24.812228 info      13024 main ./onewire.pl 79->> sleep 1 ./onewire.pl with PID 13024
+2016.03.28 16:35:25.823588 info      13024 main ./onewire.pl 79->> sleep 1 ./onewire.pl with PID 13024
+2016.03.28 16:35:26.678919 emergency  13024 main ./onewire.pl 126->> ./onewire.pl get sig Interrupted system call to shutdown 
