@@ -54,10 +54,23 @@ if ( $SYS{daemon} eq "true" ) {
 	open (STDERR, ">&STDOUT");
 	
 }	
-	
+### add logging
+if (exists( $SYS{"logging"})) {
+	if (!($LOG =&createLogging($SYS{"logging"})))
+	{
+    	print "can not create logging\n";
+		exit(0);
+    }
+}
+### Start up
+
+&log("info","start up easyHMC with PID " . $$ );	
 	
 
-use lib "/usr/local/etc/1WireToHM/modul";
+while ($run){
+	
+	
+}
 
 
 
@@ -101,7 +114,7 @@ sub shutdown
 #	change 28.03.2016
 #######################################################
 {
-	&log("emergency","$0 get sig to shutdown ");
+	&log("emergency","$0 get sig $! to shutdown ");
     exit (0);
 }  
 
