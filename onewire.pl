@@ -13,7 +13,8 @@ our $LOG;    				# loggin instance
 my $configFile="";
 my $daemon="false";
 my $run=0;
-
+chdir "/";
+	
 GetOptions('configfile=s' => \$configFile,
 			"daemon=s"   => \$daemon)
 or die "Usage: $0 --configfile --daemon true\n";
@@ -44,7 +45,6 @@ if ( $SYS{daemon} eq "true" ) {
 	$SIG{'INT'}  = \&shutdown;
 	$SIG{'TERM'} = \&shutdown;
 	$SIG{'HUP'}  = \&shutdown;
-	chdir "/";
 	umask 0;
 	foreach (0 .. (POSIX::sysconf (&POSIX::_SC_OPEN_MAX) || 1024))
 	{

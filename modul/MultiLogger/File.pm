@@ -25,7 +25,11 @@ sub new
 	$self->init($arg_hash);
 	return $self;
 }
+#######################################################
 sub init
+#	
+#
+#######################################################
 {
 	my $self= shift;
 	my $ARGS_ref= shift;
@@ -154,6 +158,7 @@ sub createnewFile
 	my $self=shift;
 	my $FH;
 	my $filename=$self->{'dir'}.$self->{'filename'};
+	
 	my %vars;
 	$vars{'level'}="info";
 	my  $message;
