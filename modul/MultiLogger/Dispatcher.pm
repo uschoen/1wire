@@ -5,9 +5,10 @@ package MultiLogger::Dispatcher;
 use strict;
 use warnings;
 use Data::Dumper;
-use MultiLogger::Dispatcher;
+
 use MultiLogger::File;
 use MultiLogger::Console;
+use Time::HiRes qw(gettimeofday);
 use constant true => 1;
 use constant false => 0;
 #######################################################
@@ -41,6 +42,86 @@ sub init
 	
 	$self->{'countLogObject'}=0;
 	
+	if (!($ARGS_ref)){
+		print "get no config for logging\n";
+		return 0;
+	}
+	if (!(exists($ARGS{'output'}))){
+		print "no output for logging\n";
+		return 0;	
+	}
+	
+	
+	#my $logger=MultiLogger::Dispatcher->new();
+	$ARGS{'msgformat'}=sub {
+						my %p = @_;
+						(my $seconds, my $microseconds) = gettimeofday;
+						my @dta=gmtime($seconds);
+						$dta[5]+=1900;
+						$dta[4]++;
+						$dta[2]=$dta[2]+1;
+						my $pid=$$;
+						my $string=sprintf("%04d.%02d.%02s %02d:%02d:%02d.%06d %-8s %6d %s\n",$dta[5],$dta[4],$dta[3],$dta[2],$dta[1],$dta[0],$microseconds,$p{'level'},$pid,$p{'message'});
+						return $string; 
+	};
+	my %outputs=%{$ARGS{'output'}};
+	my $output;
+	
+	foreach $output ( keys %outputs){
+		if (ref($outputs{$output}) eq "ARRAY"){
+			### more than fon outouts
+			my @outputs2=@{$outputs{$output}};
+			foreach my $output2 (@outputs2){
+				my $loglevel="";
+				my $configOutput=$output2;
+				if (!(exists($configOutput->{'loglevel'}))){
+					$loglevel=$ARGS{'loglevel'};
+				}else{
+					$loglevel=$configOutput->{'loglevel'};
+				}
+				$configOutput->{'msgformat'}=$ARGS{'msgformat'};
+				if (exists($configOutput->{'enable'})){
+					if ($configOutput->{'enable'} ne "true"){
+						next;
+					}
+				}
+				### file
+				if ($output eq "file"){
+					$self->add(MultiLogger::File->new($configOutput),$loglevel);
+					next;
+				}
+				### console
+				if ($output eq "console"){
+					$self->add(MultiLogger::Console->new($configOutput),$loglevel);
+					next;
+				}
+				print "error unkown logging typ ($output), please check config\n";
+			}
+			
+		}else{
+			### one output
+			my $loglevel="";
+			my $configOutput=$outputs{$output};
+			if (!(exists($configOutput->{'loglevel'}))){
+				$loglevel=$ARGS{'loglevel'};
+			}else{
+				$loglevel=$configOutput->{'loglevel'};
+			}
+			$configOutput->{'msgformat'}=$ARGS{'msgformat'};
+		
+			### file
+			if ($output eq "file"){
+				$self->add(MultiLogger::File->new($configOutput),$loglevel);
+				next;
+			}
+			### console
+			if ($output eq "console"){
+				$self->add(MultiLogger::Console->new($configOutput),$loglevel);
+				next;
+			}
+			print "error unkown logging typ ($output), please check config\n";
+		}
+	}	
 }
 
 #######################################################

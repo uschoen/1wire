@@ -12,7 +12,9 @@ our %SYS=();   				# global configuration
 our $LOG;    				# loggin instance
 my $configFile="";
 my $daemon="false";
-
+my $run=0;
+chdir "/";
+	
 GetOptions('configfile=s' => \$configFile,
 			"daemon=s"   => \$daemon)
 or die "Usage: $0 --configfile --daemon true\n";
@@ -43,7 +45,6 @@ if ( $SYS{daemon} eq "true" ) {
 	$SIG{'INT'}  = \&shutdown;
 	$SIG{'TERM'} = \&shutdown;
 	$SIG{'HUP'}  = \&shutdown;
-	chdir "/";
 	umask 0;
 	foreach (0 .. (POSIX::sysconf (&POSIX::_SC_OPEN_MAX) || 1024))
 	{
@@ -54,10 +55,26 @@ if ( $SYS{daemon} eq "true" ) {
 	open (STDERR, ">&STDOUT");
 	
 }	
-	
+### add logging
+use lib "./modul";
+use MultiLogger::Dispatcher;
+
+if (exists( $SYS{"logging"})) {
+	if (!($LOG =MultiLogger::Dispatcher->new($SYS{"logging"})))
+	{
+    	print "can not create logging\n";
+		exit(0);
+    }
+}
+### Start up
+
+&log("info","start up easyHMC with PID " . $$ );	
 	
 
-use lib "/usr/local/etc/1WireToHM/modul";
+while ($run){
+	
+	
+}
 
 
 
@@ -77,7 +94,8 @@ sub readconfig
 	if ($config = eval {$xml->XMLin($file)}){
 		return $config;
 	}	
-	print "error, cant not read config file " . $file . "\n";
+	print "error, cant not read config file:" . $file . ":\n";
+	print "usag :$0 --configfile [path and filename] \n";
     exit(0);
 }
 #######################################################
@@ -101,7 +119,7 @@ sub shutdown
 #	change 28.03.2016
 #######################################################
 {
-	&log("emergency","$0 get sig to shutdown ");
+	&log("emergency","$0 get sig $! to shutdown ");
     exit (0);
 }  
-
+1;

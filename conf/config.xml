@@ -3,5 +3,50 @@
 	<daemon>false</daemon>
 	<pidfile>/var/run/onewire.pid</pidfile>
 	<path></path>
-	
+		<logging>
+		<loglevel>
+			<unkown>true</unkown>
+		</loglevel>
+		<output>
+			<file>
+				<enable>true</enable>
+				<loglevel>
+					<unkown>true</unkown>
+					<error>true</error>
+					<critical>true</critical>
+					<alert>true</alert>
+					<emergency>true</emergency>
+					<debug>false</debug>
+					<info>false</info>
+				</loglevel>
+				<filename>error.log</filename>
+				<dir>/mnt/nas01/entwicklung/1wire/log/</dir>
+				<clearlog>true</clearlog>
+				<logrotation>true</logrotation>
+				<holdzipfiles>3</holdzipfiles>
+				<filesize>1000000</filesize>
+			</file>
+			<file>
+				<enable>true</enable>
+				<filename>debug.log</filename>
+				<dir>/mnt/nas01/entwicklung/1wire/log/</dir>
+				<clearlog>true</clearlog>
+				<logrotation>true</logrotation>
+				<holdzipfiles>3</holdzipfiles>
+				<filesize>1000000</filesize>
+			</file>
+			<console>
+				<enable>true</enable>
+				<loglevel>
+					<unkown>true</unkown>
+					<error>true</error>
+					<critical>true</critical>
+					<alert>true</alert>
+					<emergency>true</emergency>
+					<debug>true</debug>
+					<info>true</info>
+				</loglevel>
+			</console>
+		</output>
+	</logging>
 </root>
