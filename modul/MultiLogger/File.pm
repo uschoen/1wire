@@ -109,17 +109,16 @@ sub writeMSG
 	my $self=shift;
 	my $line=shift;
 	
-	my $dumy=select $self->{'filehandel'};
 	my $FH=$self->{'filehandel'};
 	if (!($FH)){
 		if (!($self->createFilehandel)){
 			return false;
 		}
-		$dumy=select $self->{'filehandel'};
 		$FH=$self->{'filehandel'};
 	}
-	$| = 1;
+	
 	print $FH $line;
+	
 	$self->logrotation();
 	return true;
 }
