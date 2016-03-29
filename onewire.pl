@@ -21,7 +21,7 @@ GetOptions('configfile=s' => \$configFile,
 or die "Usage: $0 --configfile --daemon true\n";
 
 ### loading configuration file
-%SYS = %{(&readconfig($configFile))};
+%SYS = %{(&read_config($configFile))};
 
 ### overwirte config with options
 if ($daemon){
@@ -62,7 +62,6 @@ $SIG{'HUP'}  = \&shutdown;
 use lib "./modul";
 use MultiLogger::Dispatcher;
 use Raspberry::onewire;
-
 if (exists( $SYS{"logging"})) {
 	if (!($LOG =MultiLogger::Dispatcher->new($SYS{"logging"})))
 	{
@@ -74,7 +73,6 @@ if (exists( $SYS{"logging"})) {
 
 &log("info","start up $0 with PID " . $$ );	
 
-
 while ($run){
 	### create module
 	my %Module;
@@ -85,10 +83,17 @@ while ($run){
 	while (1)
 	{
 		### read devices
+		&log("debug","reading config file: ".$configFile);
+		%SYS = %{(&read_config($configFile))};
 		my %args=%{$SYS{'onewire'}{'config'}};
 		$args{'log'}=$LOG;
 		$Module{'onewire'}->init_args(\%args);
+		my $xs = XML::Simple->new();
 		$Module{'onewire'}->scan_device_IDs();
+		my $onewireCFG=$Module{'onewire'}->get_config();
+		$SYS{'onewire'}{'config'}=$onewireCFG;
+		&write_config($configFile);
+		sleep 1;
 		exit (0);
 	}
 
@@ -96,12 +101,29 @@ while ($run){
 	%Module={};
 	sleep(1);
 }
-
-
-
-
 #######################################################
-sub readconfig
+sub write_config
+#
+#	verison:1.0
+#	last change:28.03.16
+#######################################################
+{
+	my $configFile=shift;
+	
+	&log("debug","writing config file: ".$configFile);
+	my $xs = XML::Simple->new();
+	my $xml = $xs->XMLout(\%SYS,noattr => 1, XMLDecl => "<?xml version=\"1.0\" encoding=\"UTF-8\" ?>");
+	if (open(FH, ">",$configFile))		{ 
+			FH->autoflush(1);
+			print FH $xml;
+			close FH;
+			&log("info","write successful new config to: $configFile");
+		}else{
+			&log("error","can not write to $configFile");
+		}
+}
+#######################################################
+sub read_config
 #
 #	verison:1.0
 #	last change:28.03.16

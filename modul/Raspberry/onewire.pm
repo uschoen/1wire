@@ -46,12 +46,11 @@ sub init_args
 	my %ARGS=%{$ARGS_ref};
 	
 	$self->{'log'}=(exists($ARGS{'log'})) ? $ARGS{'log'} : '';
-	$self->{'gpio_pin'}=(exists($ARGS{'gpio_pin'})) ? $ARGS{'gpio_pin'} : '4';
-	$self->{'intervall'}=(exists($ARGS{'intervall'})) ? $ARGS{'intervall'} : '30';
-	$self->{'tempDiv'}=(exists($ARGS{'tempDiv'})) ? $ARGS{'tempDiv'} : '0.3';
-	$self->{'path'}=(exists($ARGS{'path'})) ? $ARGS{'path'} : '/sys/bus/w1/devices/w1_bus_master1/';
-	$self->{'device_list'}=(exists($ARGS{'device_list'})) ? $ARGS{'device_list'} : {};
-	$self->{'slaves'} = $self->{'path'}. 'w1_master_slaves'; 
+	$self->{'config'}{'intervall'}=(exists($ARGS{'intervall'})) ? $ARGS{'intervall'} : '30';
+	$self->{'config'}{'tempDiv'}=(exists($ARGS{'tempDiv'})) ? $ARGS{'tempDiv'} : '0.3';
+	$self->{'config'}{'path'}=(exists($ARGS{'path'})) ? $ARGS{'path'} : '/sys/bus/w1/devices/w1_bus_master1/';
+	$self->{'config'}{'device_list'}=(exists($ARGS{'device_list'})) ? $ARGS{'device_list'} : {};
+	$self->{'slaves'} = $self->{'config'}{'path'}. 'w1_master_slaves'; 
 	
 	$self->log("info","onewired load new config complete");
 	
@@ -103,29 +102,51 @@ sub scan_device_IDs
 		return false;
 	}
 	$self->log("debug","check for new devices");
-	my %deviceList=%{$self->{'device_list'}};	
+	my %deviceList=%{$self->{'config'}{'device_list'}};	
 	while(<INFILE>)
     {
     	chomp;
-    	$self->log("debug","found device: $_"); 
-    	my $notfound=1;
-    	foreach my $device_id (sort keys %deviceList)
+		my $notfound=1;
+    	foreach my $device_name (sort keys %deviceList)
     	{
-    		print Dumper($device_id);
-    		
-    		
-    	}
+    		if ($deviceList{$device_name}{'device_id'} eq $_)
+    		{
+    			$notfound=0;
+    			$self->log("debug","found device $_ in device list");
+    			if (!(exists($self->{'config'}{'device_list'}{$device_name}{value})))
+    			{
+    				$self->{'config'}{'device_list'}{$device_name}{value}=0;
+    			}
+    			if (!(exists($self->{'config'}{'device_list'}{$device_name}{enable})))
+    			{
+    				$self->{'config'}{'device_list'}{$device_name}{enable}=0;
+    			}
+    			last; 
+    		}
+		}
     	if ($notfound=="1"){
-    		$self->log("info","add device id $_ in devices list");
-    		$self->{'device_list'}{$_}{'value'}=0;
+    		$self->log("info","add new device id $_ in devices list");
+    		$self->{'config'}{'device_list'}{"N".$_}{value}="0";
+    		$self->{'config'}{'device_list'}{"N".$_}{enable}=false;
+    		$self->{'config'}{'device_list'}{"N".$_}{device_id}=$_;
+    	
     	}
     	
     }
     close(INFILE);
     $self->log("debug","update devices finish");
-	return true;
- }
- ####################################################### 
+	return;
+}
+####################################################### 
+sub get_config
+#	
+#
+#######################################################
+{
+	my $self=shift;
+	return $self->{'config'};
+}
+####################################################### 
 sub log
 #	
 #
