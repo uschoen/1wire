@@ -56,10 +56,9 @@ sub init
 	$ARGS{'msgformat'}=sub {
 						my %p = @_;
 						(my $seconds, my $microseconds) = gettimeofday;
-						my @dta=gmtime($seconds);
+						my @dta=localtime(time);
 						$dta[5]+=1900;
-						$dta[4]++;
-						$dta[2]=$dta[2]+1;
+						$dta[4]+=1;
 						my $pid=$$;
 						my $string=sprintf("%04d.%02d.%02s %02d:%02d:%02d.%06d %-8s %6d %s\n",$dta[5],$dta[4],$dta[3],$dta[2],$dta[1],$dta[0],$microseconds,$p{'level'},$pid,$p{'message'});
 						return $string; 
