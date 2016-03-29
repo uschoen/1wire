@@ -139,13 +139,14 @@ sub createFilehandel
 	my $self=shift;
 	my $filename=$self->{'dir'}.$self->{'filename'};
 	my $FH;
-	if (!(open($FH, ">>$filename")))
+	if (!(open($FH, ">>",$filename)))
 	{ 
 		$self->{'enabelLog'}=false;
 		$self->{'errMSG'}="can not create Logfile";
 		$self->{'filehandel'}=false;
 		return false;	
 	}
+	$FH->autoflush(1);
 	$self->{'filehandel'}=$FH;
 	return true;
 }
@@ -163,7 +164,7 @@ sub createnewFile
 	my  $message;
 	if ($self->{'clearlog'} eq 'true')
 	{
-		if (open($FH, ">$filename"))
+		if (open($FH, ">",$filename))
 		{ 
 			$vars{'message'}="Filelog create new file";
 		}else{
@@ -173,7 +174,7 @@ sub createnewFile
 		return false;
 		}
 	}else{
-		if (open($FH, ">>$filename"))
+		if (open($FH, ">>",$filename))
 		{
 			$vars{'message'}="Filelog append log";
 		}else{
@@ -195,6 +196,7 @@ sub createnewFile
 	}else{
 		$message=$vars{'level'}." ".$vars{'message'}."\n";
 	}
+	$FH->autoflush(1);
 	print $FH $message;
 	$self->{'filehandel'}=$FH;
 	return true;
