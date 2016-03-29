@@ -1,2 +1,0 @@
-2016.03.28 16:35:21.763714 info      13024 Filelog create new file
-2016.03.28 16:35:26.685883 emergency  13024 main ./onewire.pl 126->> ./onewire.pl get sig Interrupted system call to shutdown 

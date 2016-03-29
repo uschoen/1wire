@@ -32,7 +32,7 @@ sub new
 	{
 		return false;
 	}
-	$self->log("info","onewired build complete");
+	$self->log("info","onewire build complete");
 	return $self;
 }  
 ####################################################### 
@@ -76,7 +76,7 @@ sub check_modules
   	close (DATEI);
   	if ($mods =~ /w1_gpio/ && $mods =~ /w1_therm/)
     {
-    	$self->log("info","w1 modules already loaded");
+    	$self->log("info","wire modules loaded");
     	return true;
     }else
     {
@@ -103,26 +103,21 @@ sub get_device_IDs
 		return false;
 	}
 	$self->log("debug","check for new devices");
-	my %sensor=%{$self->{'device_list'}};	
+	my %deviceList=%{$self->{'device_list'}};	
 	while(<INFILE>)
     {
     	chomp;
     	$self->log("debug","found device: $_"); 
     	my $notfound=1;
-    	foreach my $sensor_name (sort keys %sensor) {
-    		if ($sensor{$sensor_name}{'sensor_id'} eq $_){
-    			$notfound=0;
-    			if (exists($self->{'deviceIDs'}{$sensor{$sensor_name}{'ise_id'}})){
-					last;
-				}
-				$self->log("info","found sensor in device list device_id:$_  ise_id:".$sensor{$sensor_name}{'ise_id'}." enable:".$sensor{$sensor_name}{'enable'});
-				$self->{'deviceIDs'}{$sensor{$sensor_name}{'ise_id'}} = $_;
-    			$self->{'temperatures'}{$sensor{$sensor_name}{'ise_id'}}=0;
-    			$self->{'device_enable'}{$sensor{$sensor_name}{'ise_id'}}=$sensor{$sensor_name}{'enable'};
-    		}
+    	foreach my $device_id (sort keys %deviceList)
+    	{
+    		print Dumper($device_id);
+    		
+    		
     	}
     	if ($notfound=="1"){
-    		$self->log("info","device id $_ not in devices list");
+    		$self->log("info","add device id $_ in devices list");
+    		$self->{'device_list'}{$_}{'value'}=0;
     	}
     	
     }
@@ -130,3 +125,23 @@ sub get_device_IDs
     $self->log("debug","update devices finish");
 	return true;
  }
+ ####################################################### 
+sub log
+#	
+#
+#######################################################
+{
+	my $self= shift;
+	my $logdata->{'level'}=lc(shift ||"unkown");
+	$logdata->{'msg'}=shift	||"unkown msg";
+	if (!($self->{'log'})){
+		#######
+		print $logdata->{'msg'}."\n";
+		#######
+		return;
+	}
+	($logdata->{'package'},$logdata->{'filename'},$logdata->{'line'}) = caller;
+	$logdata->{'package'}=ref($self);
+	$self->{'log'}->write($logdata);
+	return 0;	
+}

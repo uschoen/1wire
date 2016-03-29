@@ -8,6 +8,7 @@ use Data::Dumper;
 use XML::Simple;
 use POSIX;
 
+
 our %SYS=();   				# global configuration
 our $LOG;    				# loggin instance
 my $configFile="";
@@ -27,7 +28,8 @@ if ($daemon){
 	$SYS{'daemon'}=$daemon;
 } 
 ### daemonize ?
-if ( $SYS{daemon} eq "true" ) {
+if ( $SYS{'daemon'} eq "true" ) {
+	print "switch to daemon mode\n";
 	my $pidFile= $SYS{'pidfile'};
 	POSIX::setsid or die "setsid: $!";
 	my $pid = fork ();
@@ -49,8 +51,8 @@ if ( $SYS{daemon} eq "true" ) {
 	open (STDIN, "</dev/null");
 	open (STDOUT, ">/dev/null");
 	open (STDERR, ">&STDOUT");
-	
 }
+
 $SIG{'PIPE'} = \&shutdown;
 $SIG{'INT'}  = \&shutdown;
 $SIG{'TERM'} = \&shutdown;
@@ -59,6 +61,7 @@ $SIG{'HUP'}  = \&shutdown;
 ### add logging
 use lib "./modul";
 use MultiLogger::Dispatcher;
+use Raspberry::onewire;
 
 if (exists( $SYS{"logging"})) {
 	if (!($LOG =MultiLogger::Dispatcher->new($SYS{"logging"})))
@@ -70,36 +73,23 @@ if (exists( $SYS{"logging"})) {
 ### Start up
 
 &log("info","start up $0 with PID " . $$ );	
-	
+
 
 while ($run){
 	### create module
-	my %Module={};
+	my %Module;
 	my %args=%{$SYS{'onewire'}{'config'}};
 	$args{'log'}=$LOG;
-	&log("info","build onewire modul" . $$ );
-	$Module{'onewire'}=new Raspberry::onewier(%args); 	
-
-	 
-	while ()
+	&log("info","build onewire modul");
+	$Module{'onewire'}=new Raspberry::onewire(\%args); 	
+	while (1)
 	{
 		### read devices
 		my %args=%{$SYS{'onewire'}{'config'}};
 		$args{'log'}=$LOG;
-		$Module{'onewired'}->init_args(%args);
+		$Module{'onewire'}->init_args(\%args);
+		$Module{'onewire'}->scan_device_IDs();
 		
-		my $nextcheck= time();
-		while ()
-		{
-			### read value
-			if ($nextcheck>time())
-			{
-				sleep(1);
-				next;
-			}
-			$nextcheck= time()+$SYS{'intervall'};
-		
-		}
 	}
 
 	&log("error","$0 restarts" . $$ );
@@ -141,8 +131,7 @@ sub log
 	if ($LOG)
 	{   
 		$LOG->write($logdata);
-	}
-	return 0;	
+	}	
 }
 #################################################################
 sub shutdown 
