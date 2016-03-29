@@ -32,7 +32,7 @@
 					<info>false</info>
 				</loglevel>
 				<filename>error.log</filename>
-				<dir>/smnt/nas01/entwicklung/onewire/1wire/log/</dir>
+				<dir>/mnt/nas01/entwicklung/onewire/1wire/log/</dir>
 				<clearlog>true</clearlog>
 				<logrotation>true</logrotation>
 				<holdzipfiles>3</holdzipfiles>
@@ -41,7 +41,7 @@
 			<file>
 				<enable>true</enable>
 				<filename>debug.log</filename>
-				<dir>/smnt/nas01/entwicklung/onewire/1wire/log/</dir>
+				<dir>/mnt/nas01/entwicklung/onewire/1wire/log/</dir>
 				<clearlog>true</clearlog>
 				<logrotation>true</logrotation>
 				<holdzipfiles>3</holdzipfiles>
