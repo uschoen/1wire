@@ -1,2 +1,0 @@
-2016.03.28 20:30:09.017469 info        702 Filelog create new file
-2016.03.28 20:30:12.533280 emergency    702 main ./onewire.pl 142->> ./onewire.pl get sig Inappropriate ioctl for device to shutdown 

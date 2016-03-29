@@ -88,7 +88,7 @@ while ($run){
 		my %args=%{$SYS{'onewire'}{'config'}};
 		$args{'log'}=$LOG;
 		$Module{'onewire'}->init_args(\%args);
-		$Module{'onewire'}->get_device_IDs();
+		$Module{'onewire'}->scan_device_IDs();
 		
 	}
 
