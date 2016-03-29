@@ -18,6 +18,8 @@ nytprof.out
 *.o
 *.bs
 /_eumm/
+log/debug.log
+log/error.log
 
 # =========================
 # Operating System Files
