@@ -1,6 +1,15 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <opt>
+  <connector>
+    <name>homematic</name>
+    <config>
+      <hm_url>http://192.168.3.90/config/xmlapi/statechange.cgi</hm_url>
+      <ise_id>ise_id</ise_id>
+      <value>value</value>
+    </config>
+  </connector>
   <daemon>false</daemon>
+  <intervall>30</intervall>
   <logging>
     <name>loglevel</name>
     <unkown>true</unkown>
@@ -48,51 +57,53 @@
     </file>
   </logging>
   <onewire>
-    <name>1 Wired Temperature</name>
+    <name>onewire</name>
     <config>
       <device_list>
         <name>_H_Boden_Ruecklauf</name>
         <device_id>28-0115913432ff</device_id>
-        <enable>0</enable>
-        <value>0</value>
+        <enable>1</enable>
+        <ise_id>123456</ise_id>
+        <value> 31.80</value>
       </device_list>
       <device_list>
         <name>_H_Boden_Vorlauf</name>
         <device_id>28-011591355eff</device_id>
-        <enable>0</enable>
-        <value>0</value>
+        <enable>1</enable>
+        <ise_id>123456</ise_id>
+        <value> 29.00</value>
       </device_list>
       <device_list>
         <name>_H_Heizung_Vorlauf</name>
         <device_id>28-011591363eff</device_id>
-        <enable>0</enable>
-        <value>0</value>
+        <enable>1</enable>
+        <ise_id>123456</ise_id>
+        <value> 40.10</value>
       </device_list>
       <device_list>
         <name>_H_Koerkper_Ruecklauf</name>
         <device_id>28-011591382fff</device_id>
-        <enable>0</enable>
-        <value>0</value>
+        <enable>1</enable>
+        <ise_id>123456</ise_id>
+        <value> 28.90</value>
       </device_list>
       <device_list>
         <name>_H_Koerkper_Vorlauf</name>
         <device_id>28-0115913679ff</device_id>
         <enable>0</enable>
+        <ise_id>123456</ise_id>
         <value>8</value>
       </device_list>
       <device_list>
         <name>_H_Warmwasser</name>
         <device_id>28-0315911b36ff</device_id>
         <enable>0</enable>
+        <ise_id>123456</ise_id>
         <value>76</value>
       </device_list>
-      <intervall>30</intervall>
       <path>/sys/bus/w1/devices/w1_bus_master1/</path>
       <tempDiv>0.5</tempDiv>
     </config>
-    <enable>true</enable>
-    <modul>wired1</modul>
-    <package>Raspberry</package>
   </onewire>
   <path>/mnt/nas01/entwicklung/onewire/1wire</path>
   <pidfile>/var/run/onewire.pid</pidfile>

@@ -46,7 +46,6 @@ sub init_args
 	my %ARGS=%{$ARGS_ref};
 	
 	$self->{'log'}=(exists($ARGS{'log'})) ? $ARGS{'log'} : '';
-	$self->{'config'}{'intervall'}=(exists($ARGS{'intervall'})) ? $ARGS{'intervall'} : '30';
 	$self->{'config'}{'tempDiv'}=(exists($ARGS{'tempDiv'})) ? $ARGS{'tempDiv'} : '0.3';
 	$self->{'config'}{'path'}=(exists($ARGS{'path'})) ? $ARGS{'path'} : '/sys/bus/w1/devices/w1_bus_master1/';
 	$self->{'config'}{'device_list'}=(exists($ARGS{'device_list'})) ? $ARGS{'device_list'} : {};
@@ -89,13 +88,75 @@ sub check_modules
     }
 }
 ####################################################### 
+sub read_device
+#	
+#
+#######################################################
+{
+	my $self=shift;
+	my $deviceID = shift;
+	my $filename = $self->{'config'}{'path'} . $deviceID . '/w1_slave';
+	my $sensordata;
+	
+	if (!(open (DATEI, '<', $filename)))
+	{ 
+		$self->log("warning","Unable to open $filename: $!");
+		return "**U**";
+	}
+  	$sensordata = join(' ',<DATEI>);
+  	close (DATEI);
+
+	if($sensordata =~ m/YES/)
+    {
+    	$sensordata =~ /t=(\D*\d+)/i;
+    	$sensordata = ($1/1000);
+    	$sensordata = sprintf "%.1f", $sensordata;
+    	return ($sensordata);
+    }else{
+    	$self->log("info","CRC Invalid for $deviceID. $sensordata ");
+    	return "**U**";
+    }
+}
+####################################################### 
+sub update_devices
+#	
+#
+#######################################################
+{
+	my $self=shift;
+	my %deviceIDs=%{$self->{'config'}{'device_list'}};
+	for my $device_name (sort(keys %deviceIDs))
+  	{
+  		if ($deviceIDs{$device_name}{'enable'} ne "1")
+  		{
+  			$self->log("debug","$device_name is disable");
+  			next;
+  		}
+    	my $value = sprintf("%6.2f",$self->read_device($deviceIDs{$device_name}{'device_id'}));
+  		$self->log("debug","ID: ".$deviceIDs{$device_name}{'device_id'}." value : $value"); 
+  		if ($value ne "**U**")
+    	{
+    		$self->log("debug","is ".$deviceIDs{$device_name}{'value'}." < ".($value-$self->{'config'}{'tempDiv'})." or ".$deviceIDs{$device_name}{'value'}." >".($value+$self->{'config'}{'tempDiv'}));
+    		my $tempdiv=$self->{'config'}{'tempDiv'};
+    		if (($deviceIDs{$device_name}{'value'} < ($value-$tempdiv)) or ($deviceIDs{$device_name}{'value'} > ($value+$tempdiv)))
+    		{
+    			$self->{'config'}{'device_list'}{$device_name}{'value'} = $value;
+    			$self->log("debug",sprintf("set ne temperature for device %s %6.2f", $device_name, $value));
+    			
+    		}
+    	}else{
+ 			$self->log("info","get no data from $device_name");
+ 		}
+  	}
+}
+####################################################### 
 sub scan_device_IDs
 #	
 #
 #######################################################
 {
 	my $self=shift;
-
+	my $found=0;
 	if (!(open(INFILE, '<', $self->{'slaves'})))
 	{
 		$self->log("warning","cant not read ".$self->{'slaves'});
@@ -129,13 +190,13 @@ sub scan_device_IDs
     		$self->{'config'}{'device_list'}{"N".$_}{value}="0";
     		$self->{'config'}{'device_list'}{"N".$_}{enable}=false;
     		$self->{'config'}{'device_list'}{"N".$_}{device_id}=$_;
-    	
+    		$found=1;
     	}
     	
     }
     close(INFILE);
     $self->log("debug","update devices finish");
-	return;
+	return $found;
 }
 ####################################################### 
 sub get_config
@@ -155,10 +216,9 @@ sub log
 	my $self= shift;
 	my $logdata->{'level'}=lc(shift ||"unkown");
 	$logdata->{'msg'}=shift	||"unkown msg";
-	if (!($self->{'log'})){
-		#######
+	if (!($self->{'log'}))
+	{
 		print $logdata->{'msg'}."\n";
-		#######
 		return;
 	}
 	($logdata->{'package'},$logdata->{'filename'},$logdata->{'line'}) = caller;

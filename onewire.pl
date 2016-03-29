@@ -89,10 +89,14 @@ while ($run){
 		$args{'log'}=$LOG;
 		$Module{'onewire'}->init_args(\%args);
 		my $xs = XML::Simple->new();
-		$Module{'onewire'}->scan_device_IDs();
-		my $onewireCFG=$Module{'onewire'}->get_config();
-		$SYS{'onewire'}{'config'}=$onewireCFG;
-		&write_config($configFile);
+		if ($Module{'onewire'}->scan_device_IDs())
+		{
+			my $onewireCFG=$Module{'onewire'}->get_config();
+			$SYS{'onewire'}->{'config'}=$onewireCFG;
+			&write_config($configFile);
+		}
+		$Module{'onewire'}->update_devices();
+		
 		sleep 1;
 		exit (0);
 	}
