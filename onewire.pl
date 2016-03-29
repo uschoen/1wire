@@ -89,7 +89,7 @@ while ($run){
 		$args{'log'}=$LOG;
 		$Module{'onewire'}->init_args(\%args);
 		$Module{'onewire'}->scan_device_IDs();
-		
+		exit (0);
 	}
 
 	&log("error","$0 restarts" . $$ );

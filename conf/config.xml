@@ -2,7 +2,7 @@
 <root>
 	<daemon>false</daemon>
 	<pidfile>/var/run/onewire.pid</pidfile>
-	<path>/mnt/nas01/entwicklung/1wire</path>
+	<path>/mnt/nas01/entwicklung/onewire/1wire</path>
 	<onewire name="1 Wired Temperature" package="Raspberry" modul="wired1" enable="true">
 	   	<config>
 	   		<gpio_pin>4</gpio_pin>
@@ -12,7 +12,6 @@
 			<path>/sys/bus/w1/devices/w1_bus_master1/</path>
 			<slaves>w1_master_slaves</slaves>
 			<device_list>
-				<dummy></dummy>
 			</device_list>
 		</config>
 	</onewire>
@@ -33,7 +32,7 @@
 					<info>false</info>
 				</loglevel>
 				<filename>error.log</filename>
-				<dir>/mnt/nas01/entwicklung/1wire/log/</dir>
+				<dir>/smnt/nas01/entwicklung/onewire/1wire/log/</dir>
 				<clearlog>true</clearlog>
 				<logrotation>true</logrotation>
 				<holdzipfiles>3</holdzipfiles>
@@ -42,7 +41,7 @@
 			<file>
 				<enable>true</enable>
 				<filename>debug.log</filename>
-				<dir>/mnt/nas01/entwicklung/1wire/log/</dir>
+				<dir>/smnt/nas01/entwicklung/onewire/1wire/log/</dir>
 				<clearlog>true</clearlog>
 				<logrotation>true</logrotation>
 				<holdzipfiles>3</holdzipfiles>

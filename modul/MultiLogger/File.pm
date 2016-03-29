@@ -83,6 +83,7 @@ sub logrotation
 	my $filename=$self->{'dir'}.$self->{'filename'};
 	my $zipName=$self->{'dir'}.$self->{'filename'}.time().".zip";
 	my $size= -s $filename;
+	if (!($size)){return false;}
 	if ($size < $self->{'filesize'}*1024){
 		return false;
 	}
@@ -111,12 +112,11 @@ sub writeMSG
 	
 	my $FH=$self->{'filehandel'};
 	if (!($FH)){
-		if (!($self->createFilehandel)){
+		if (!($self->createFilehandel())){
 			return false;
 		}
 		$FH=$self->{'filehandel'};
 	}
-	
 	print $FH $line;
 	
 	$self->logrotation();
@@ -139,13 +139,13 @@ sub createFilehandel
 	my $self=shift;
 	my $filename=$self->{'dir'}.$self->{'filename'};
 	my $FH;
-	open($FH, ">>$filename"); 
-	if (!($FH)){
+	if (!(open($FH, ">>$filename")))
+	{ 
 		$self->{'enabelLog'}=false;
 		$self->{'errMSG'}="can not create Logfile";
-		return 0;	
+		$self->{'filehandel'}=false;
+		return false;	
 	}
-	
 	$self->{'filehandel'}=$FH;
 	return true;
 }
@@ -161,16 +161,32 @@ sub createnewFile
 	my %vars;
 	$vars{'level'}="info";
 	my  $message;
-	if ($self->{'clearlog'} eq 'true'){
-		open($FH, ">$filename"); 
-		$vars{'message'}="Filelog create new file";
+	if ($self->{'clearlog'} eq 'true')
+	{
+		if (open($FH, ">$filename"))
+		{ 
+			$vars{'message'}="Filelog create new file";
+		}else{
+			$self->{'enabelLog'}=false;
+			$self->{'errMSG'}="can not create Logfile";
+			$self->{'filehandel'}=false;
+		return false;
+		}
 	}else{
-		open($FH, ">>$filename"); 
-		$vars{'message'}="Filelog append log";
+		if (open($FH, ">>$filename"))
+		{
+			$vars{'message'}="Filelog append log";
+		}else{
+			$self->{'enabelLog'}=false;
+			$self->{'errMSG'}="can not create Logfile";
+			$self->{'filehandel'}=false;
+			return false;
+		}
 	}
 	if (!($FH)){
 		$self->{'enabelLog'}=false;
 		$self->{'errMSG'}="can not create Logfile";
+		$self->{'filehandel'}=false;
 		return false;	
 	}
 	if ($self->{'msgformat'}){
