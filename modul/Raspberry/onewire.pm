@@ -118,7 +118,7 @@ sub read_device
     }
 }
 ####################################################### 
-sub update_devices
+sub read_devices
 #	
 #
 #######################################################
@@ -132,22 +132,29 @@ sub update_devices
   			$self->log("debug","$device_name is disable");
   			next;
   		}
-    	my $value = sprintf("%6.2f",$self->read_device($deviceIDs{$device_name}{'device_id'}));
+    	my $value =$self->read_device($deviceIDs{$device_name}{'device_id'});
   		$self->log("debug","ID: ".$deviceIDs{$device_name}{'device_id'}." value : $value"); 
   		if ($value ne "**U**")
     	{
-    		$self->log("debug","is ".$deviceIDs{$device_name}{'value'}." < ".($value-$self->{'config'}{'tempDiv'})." or ".$deviceIDs{$device_name}{'value'}." >".($value+$self->{'config'}{'tempDiv'}));
+    		$value =sprintf("%.2f",$value);
     		my $tempdiv=$self->{'config'}{'tempDiv'};
-    		if (($deviceIDs{$device_name}{'value'} < ($value-$tempdiv)) or ($deviceIDs{$device_name}{'value'} > ($value+$tempdiv)))
+    		my $oldtemp=$self->{'device_temparture'}{$device_name};
+    		$self->log("debug","is: ".$oldtemp." < ".($value-$tempdiv)." or is:".$oldtemp." >".($value+$tempdiv));
+    		if (($oldtemp < ($value-$tempdiv)) or ($oldtemp > ($value+$tempdiv)))
     		{
     			$self->{'config'}{'device_list'}{$device_name}{'value'} = $value;
-    			$self->log("debug",sprintf("set ne temperature for device %s %6.2f", $device_name, $value));
-    			
+    			$self->{'device_temparture'}{$device_name}=$value;
+    			$self->log("info","set temperature for device  $device_name  $value");
+    		}else{
+    			$self->log("debug","no update");
     		}
     	}else{
- 			$self->log("info","get no data from $device_name");
+ 			$self->log("warning","get no data from $device_name disable device");
+ 			$self->{'config'}{'device_list'}{$device_name}{enable} = 0;
+ 			
  		}
   	}
+  	
 }
 ####################################################### 
 sub scan_device_IDs
@@ -156,47 +163,137 @@ sub scan_device_IDs
 #######################################################
 {
 	my $self=shift;
-	my $found=0;
+	
+	my $device_change=false;
+	my $device_name;
+	my %default_device;
+	
 	if (!(open(INFILE, '<', $self->{'slaves'})))
 	{
 		$self->log("warning","cant not read ".$self->{'slaves'});
 		return false;
 	}
+	$self->clear_device_available_flag();
 	$self->log("debug","check for new devices");
 	my %deviceList=%{$self->{'config'}{'device_list'}};	
 	while(<INFILE>)
     {
     	chomp;
 		my $notfound=1;
-    	foreach my $device_name (sort keys %deviceList)
+    	foreach $device_name (sort keys %deviceList)
     	{
     		if ($deviceList{$device_name}{'device_id'} eq $_)
     		{
     			$notfound=0;
     			$self->log("debug","found device $_ in device list");
+    			$self->{'device_available'}{$device_name}=true;
     			if (!(exists($self->{'config'}{'device_list'}{$device_name}{value})))
     			{
-    				$self->{'config'}{'device_list'}{$device_name}{value}=0;
+    				$self->{'config'}{'device_list'}{$device_name}{value}=0;	
+    			}
+    			if (!(exists($self->{'device_temparture'}{$device_name})))
+    			{
+    				$self->{'device_temparture'}{$device_name}=0; 
+    				$self->log("debug","set device temparatur for $device_name to 0");   				
     			}
     			if (!(exists($self->{'config'}{'device_list'}{$device_name}{enable})))
     			{
     				$self->{'config'}{'device_list'}{$device_name}{enable}=0;
     			}
+    			if (!(exists($self->{'config'}{'device_list'}{$device_name}{timestamp})))
+    			{
+    				$self->{'config'}{'device_list'}{$device_name}{timestamp}=time();
+    			}
+    			
     			last; 
     		}
 		}
     	if ($notfound=="1"){
-    		$self->log("info","add new device id $_ in devices list");
-    		$self->{'config'}{'device_list'}{"N".$_}{value}="0";
-    		$self->{'config'}{'device_list'}{"N".$_}{enable}=false;
-    		$self->{'config'}{'device_list'}{"N".$_}{device_id}=$_;
-    		$found=1;
+    		$self->add_new_device($_);
+    		$device_change=true;
     	}
     	
     }
+    if ($self->check_unavailable_device())
+    {
+    	$device_change=true;
+    }
     close(INFILE);
     $self->log("debug","update devices finish");
-	return $found;
+	return $device_change;
+}
+####################################################### 
+sub check_unavailable_device
+#	
+#
+#######################################################
+{
+	my $self=shift;
+	
+	my $device_change=false;
+	my $device_name;
+	my %deviceList=%{$self->{'device_available'}};
+	
+	$self->log("debug","check for unuse device");
+	foreach $device_name (sort keys %deviceList)
+    {
+    	if ((!($self->{'device_available'}{$device_name})) and (!($self->{'config'}{'device_list'}{$device_name}{enable})))
+    	{
+    		$device_change=true;
+    		$self->{'config'}{'device_list'}{$device_name}{enable}=false;
+    		$self->log("info","disable $device_name, no sensor found");		
+    	}
+    }
+    return $device_change;	
+}
+####################################################### 
+sub clear_device_available_flag
+#	
+#
+#######################################################
+{
+	my $self=shift;
+	
+	my $device_name;
+	my %deviceList=%{$self->{'config'}{'device_list'}};	
+	
+	$self->log("debug","clear device flag");
+	
+	foreach $device_name (sort keys %deviceList)
+    {
+    	if  (!(exists($self->{'device_available'}{$device_name})))
+    	{
+    		$self->{'device_available'}{$device_name}=false;
+    		$self->log("debug","defice $device_name, adding available flag=false ");
+    	}
+    }
+	%deviceList=%{$self->{'device_available'}};
+	
+	foreach $device_name (sort keys %deviceList)
+    {
+    	$self->{'device_available'}{$device_name}=false;
+    }
+	
+}	
+####################################################### 
+sub add_new_device
+#	
+#
+#######################################################
+{
+	my $self=shift;
+	my $device_id=shift;
+	
+	my $device_name="N".$device_id;
+	$self->log("info","add new device with id: $device_id");
+	
+	$self->log("info","add new device id $_ in devices list");
+    $self->{'config'}{'device_list'}{$device_name}{value}="0";
+    $self->{'config'}{'device_list'}{$device_name}{enable}=false;
+    $self->{'config'}{'device_list'}{$device_name}{device_id}=$device_id;
+    $self->{'config'}{'device_list'}{$device_name}{timestamp}=time();
+    $self->{'device_temparture'}{$device_name}=0;
+    $self->{'device_available'}{$device_name}=true;
 }
 ####################################################### 
 sub get_config

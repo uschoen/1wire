@@ -79,7 +79,11 @@ while ($run){
 	my %args=%{$SYS{'onewire'}{'config'}};
 	$args{'log'}=$LOG;
 	&log("info","build onewire modul");
-	$Module{'onewire'}=new Raspberry::onewire(\%args); 	
+	if (!($Module{'onewire'}=new Raspberry::onewire(\%args)))
+	{
+		&log("error","can not build onewire modul");
+		&shutdown();
+	} 	
 	while (1)
 	{
 		### read devices
@@ -95,10 +99,10 @@ while ($run){
 			$SYS{'onewire'}->{'config'}=$onewireCFG;
 			&write_config($configFile);
 		}
-		$Module{'onewire'}->update_devices();
+		$Module{'onewire'}->read_devices();
 		
-		sleep 1;
-		exit (0);
+		sleep 10;
+		#exit (0);
 	}
 
 	&log("error","$0 restarts" . $$ );

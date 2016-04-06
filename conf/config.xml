@@ -1,11 +1,27 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <opt>
   <connector>
-    <name>homematic</name>
+    <name>Homatic Updater</name>
     <config>
+      <fields>
+        <ise_id>ise_id</ise_id>
+        <value>value</value>
+      </fields>
       <hm_url>http://192.168.3.90/config/xmlapi/statechange.cgi</hm_url>
-      <ise_id>ise_id</ise_id>
-      <value>value</value>
+    </config>
+  </connector>
+  <connector>
+    <name>mysql</name>
+    <config>
+      <db_host>192.168.3.100</db_host>
+      <db_password>test</db_password>
+      <db_table>statistic</db_table>
+      <db_user>root</db_user>
+      <fields>
+        <device>device_id</device>
+        <timestamp>timestamp</timestamp>
+        <value>value</value>
+      </fields>
     </config>
   </connector>
   <daemon>false</daemon>
@@ -60,46 +76,50 @@
     <name>onewire</name>
     <config>
       <device_list>
-        <name>_H_Boden_Ruecklauf</name>
+        <name>N28-0115913432ff</name>
         <device_id>28-0115913432ff</device_id>
         <enable>1</enable>
-        <ise_id>123456</ise_id>
-        <value> 31.80</value>
+        <timestamp>1459801019</timestamp>
+        <value>0</value>
+      </device_list>
+      <device_list>
+        <name>N28-0315911b36ff</name>
+        <device_id>28-0315911b36ff</device_id>
+        <enable>1</enable>
+        <timestamp>1459801019</timestamp>
+        <value>0</value>
       </device_list>
       <device_list>
         <name>_H_Boden_Vorlauf</name>
         <device_id>28-011591355eff</device_id>
         <enable>1</enable>
         <ise_id>123456</ise_id>
-        <value> 29.00</value>
+        <timestamp>1459288978</timestamp>
+        <value>0</value>
       </device_list>
       <device_list>
         <name>_H_Heizung_Vorlauf</name>
         <device_id>28-011591363eff</device_id>
         <enable>1</enable>
         <ise_id>123456</ise_id>
-        <value> 40.10</value>
+        <timestamp>1459288978</timestamp>
+        <value>0</value>
       </device_list>
       <device_list>
         <name>_H_Koerkper_Ruecklauf</name>
         <device_id>28-011591382fff</device_id>
         <enable>1</enable>
         <ise_id>123456</ise_id>
-        <value> 28.90</value>
+        <timestamp>1459288978</timestamp>
+        <value>0</value>
       </device_list>
       <device_list>
         <name>_H_Koerkper_Vorlauf</name>
         <device_id>28-0115913679ff</device_id>
-        <enable>0</enable>
+        <enable>1</enable>
         <ise_id>123456</ise_id>
-        <value>8</value>
-      </device_list>
-      <device_list>
-        <name>_H_Warmwasser</name>
-        <device_id>28-0315911b36ff</device_id>
-        <enable>0</enable>
-        <ise_id>123456</ise_id>
-        <value>76</value>
+        <timestamp>1459288978</timestamp>
+        <value>0</value>
       </device_list>
       <path>/sys/bus/w1/devices/w1_bus_master1/</path>
       <tempDiv>0.5</tempDiv>
