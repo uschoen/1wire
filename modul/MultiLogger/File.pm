@@ -8,6 +8,7 @@ use Data::Dumper;
 
 use constant true => 1;
 use constant false => 0;
+
 #######################################################
 sub new
 #	Vars=%config
@@ -47,6 +48,7 @@ sub init
 	$self->createnewFile();
 		
 }
+
 #######################################################
 sub message
 #
@@ -200,4 +202,13 @@ sub createnewFile
 	print $FH $message;
 	$self->{'filehandel'}=$FH;
 	return true;
+}
+####################################################### 
+sub DESTROY
+#	
+#
+#######################################################
+{
+	my $self= shift;
+	$self->{'filehandel'};
 }

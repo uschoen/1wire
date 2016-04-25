@@ -21,7 +21,6 @@ sub new
 	my $class=shift;
 	my $arg_hash = (ref($_[0]) eq 'HASH') ? $_[0] : {@_};
 
-	
 	my $self={};
 	bless $self,$class;
 	
@@ -46,6 +45,7 @@ sub init
 		print "get no config for logging\n";
 		return 0;
 	}
+	$self->{path}=$ARGS{'path'};
 	if (!(exists($ARGS{'output'}))){
 		print "no output for logging\n";
 		return 0;	
@@ -158,8 +158,8 @@ sub write
 	$defaultsParms->{'filename'} = "unkown";
 	$defaultsParms->{'line'} = "unkown";
 	$Parms={%$defaultsParms,%$Parms};
-		
-	
+	my $path= $self->{path};
+	$Parms->{'filename'} =~ s/$path//;	
 	my $level=$Parms->{'level'};
 	my $message=$Parms->{'package'}." ".$Parms->{'filename'}." ".$Parms->{'line'}."->> ".$Parms->{'msg'};
 	
@@ -201,4 +201,5 @@ sub write
 		}
 	}
 }
+
 1;
