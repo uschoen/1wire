@@ -45,7 +45,8 @@ sub init
 		print "get no config for logging\n";
 		return 0;
 	}
-	$self->{path}=$ARGS{'path'};
+	$self->{'path'}=(exists($ARGS{'path'})) ? $ARGS{'path'} : '';
+	
 	if (!(exists($ARGS{'output'}))){
 		print "no output for logging\n";
 		return 0;	
