@@ -3,7 +3,7 @@
 	<daemon>true</daemon>
 	<intervall>120</intervall>
 	<path>/mnt/nas01/entwicklung/onewire/1wire</path>
-	<pidfile>/var/run/onewire.pid</pidfile>
+	<pidfile>/var/run/EHCgateway.pid</pidfile>
 	<gateways>
 		<onewire name="onewire temperatur sensor" package="Gateway" modul="onewire" typ="intervall" time="60">
 		<config>
