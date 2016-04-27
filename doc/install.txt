@@ -1,0 +1,4 @@
+apt-get install libxml-simple-perl libarchive-zip-perl
+
+cpan:
+install XML::Simple
