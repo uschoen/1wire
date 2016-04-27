@@ -296,13 +296,13 @@ sub add_new_device
     $self->{'device_available'}{$device_name}=true;
 }
 ####################################################### 
-sub get_config
+sub Get_Device_List
 #	
 #
 #######################################################
 {
 	my $self=shift;
-	return $self->{'config'};
+	return $self->{'config'}{'device_list'};
 }
 ####################################################### 
 sub log
