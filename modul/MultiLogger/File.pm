@@ -84,6 +84,7 @@ sub logrotation
 	}
 	my $filename=$self->{'dir'}.$self->{'filename'};
 	my $zipName=$self->{'dir'}.$self->{'filename'}.time().".zip";
+		
 	my $size= -s $filename;
 	if (!($size)){return false;}
 	if ($size < $self->{'filesize'}*1024){
@@ -100,9 +101,33 @@ sub logrotation
 	my $zip = Archive::Zip->new();
 	$zip->addFile( $filename );
 	$zip->writeToFileNamed($zipName);
+	
 	unlink($filename);
 	$self->createnewFile();
+	$self->clear_zip_files();
 	return true;
+}
+#######################################################
+sub clear_zip_files
+#
+#######################################################
+{
+	my $self=shift;
+	my %logfiles;
+
+    opendir (DIR, $self->{'dir'}) or die $!;
+	while (my $filename = readdir(DIR)) {
+		my $find_name="(".$self->{'filename'}.'\d{10,10}.zip)';
+		if ($filename eq ".." or $filename eq "." or (!($filename=~/$find_name/)) ) { next;}
+		my ($dev,$ino,$mode,$nlink,$uid,$gid,$rdev,$size,$atime,$mtime,$ctime,$blksize,$blocks)  = stat($self->{'dir'}.$filename);
+		$logfiles{$mtime}=$self->{'dir'}.$filename;
+    }
+	foreach my $name (sort keys %logfiles) {
+		my $logfiles=keys %logfiles;
+		if ($logfiles<=$self->{'holdzipfiles'}){last;}
+		unlink($logfiles{$name});
+		delete $logfiles{$name};
+	}
 }	
 #######################################################
 sub writeMSG
