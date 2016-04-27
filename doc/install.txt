@@ -1,4 +1,47 @@
-apt-get install libxml-simple-perl libarchive-zip-perl
+Installation of EasyHomeControl. (EHC)
+First install some software pakgage
+->apt-get install libxml-simple-perl libarchive-zip-perl
 
-cpan:
-install XML::Simple
+download from githup the zip file.
+->cd /tmp
+->wget https://github.com/uschoen/1wire/archive/master.zip
+Crate a new dir for EHCgateway
+->sudo mkdir /usr/local/easyHC
+Unzip the file
+->unzip master.zip 
+make it excuteable
+->chmod -R 775 1wire-master/
+Change to 1wire-master dir
+->cd 1wire-master /usr/local/easyHC
+Move the file to 
+->sudo mv * /usr/local/easyHC
+
+Now you can install some perl pakage with cpan
+->sudo cpan
+->install XML::Simple strict warnings Getopt::Long Data::Dumper POSIX LWP::Simple
+
+if you use the MYSQL connector
+->sudo cpan
+->install DBI DBD::mysql
+
+If you want  to start  via init.d, you can use the script in /doc/service/EHCgateway
+
+/// if you use othe path and names please change it in the init.d start script.
+-------------
+.
+DAEMON_PATH="/usr/local/easyHC"											#installation path
+DAEMON=$DAEMON_PATH/EHCgateway.pl										#Script name
+DAEMONOPTS="--configfile $DAEMON_PATH/conf/config.xml --daemon true"	#start arguments, --configfile= plce of the config  file, --daemon = true run as demo
+
+NAME=EHCgateway															#programm name and pid file name
+.
+---------------
+Next copy the script to /etc/init.d
+->sudo cp doc/service/EHCgateway /etc/init.d/EHCgateway
+->sudo chmod 775 /etc/init.d/EHCgateway
+->sudo update-rc.d EHCgateway  defaults
+
+Next changing the config file in /usr/local/easyHC/conf. Copy the config.exemple.xml to config.xml
+->cp /usr/local/easyHC/conf/config.exempel.xml /usr/local/easyHC/conf/config.xml
+now you can change the config file. For more info se in the doc directory. Start with general_config.txt file.
+

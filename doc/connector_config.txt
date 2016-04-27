@@ -1,0 +1,29 @@
+<HomematicXML enable="false" name="Homematic Updater" package="Connector" modul="HomematicXML">
+			<gateways>
+      			<onewire></onewire>
+			</gateways>
+			<config>
+				<hm_url>http://IP OFF HOMEMATIC/config/xmlapi/statechange.cgi</hm_url>
+				<fields>
+					<ise_id>ise_id</ise_id>
+					<value>new_value</value>
+				</fields>
+			</config>
+    	</HomematicXML>
+ 		<Mysql enable="false" name="MYSQL Statistik" package="Connector" modul="Mysql">
+ 		<gateways>
+      		<onewire></onewire>
+     	</gateways>
+ 		<config>
+			<db_host>IP OFF MYSQL DATABASE</db_host>
+      		<db_password>PASSWORD</db_password>
+      		<db_name>DB NAME</db_name>
+      		<db_table>TABLE</db_table>
+      		<db_user>USER</db_user>
+      		<fields>
+        		<device_id>device</device_id>
+        		<timestamp>timestamp</timestamp>
+        		<value>value</value>
+      		</fields>
+		</config>
+    	</Mysql>

@@ -2,14 +2,14 @@
 <opt>
 	<daemon>true</daemon>
 	<intervall>120</intervall>
-	<path>/mnt/nas01/entwicklung/onewire/1wire</path>
+	<path>/usr/local/easyHC</path>
 	<pidfile>/var/run/EHCgateway.pid</pidfile>
 	<gateways>
 		<onewire name="onewire temperatur sensor" package="Gateway" modul="onewire" typ="intervall" time="60">
 		<config>
 			<path>/sys/bus/w1/devices/w1_bus_master1/</path>
       		<tempDiv>0.5</tempDiv>
-      		<temp_configfile>/mnt/nas01/entwicklung/onewire/1wire/conf/activ_device.xml</temp_configfile>
+      		<temp_configfile>/usr/local/easyHC/conf/activ_device.xml</temp_configfile>
 			<device_list>
 				<N28-0115913432ff>
 					<available>1</available>
