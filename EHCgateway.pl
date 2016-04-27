@@ -115,12 +115,12 @@ if (exists( $SYS{"logging"})) {
 &log("debug","main lopp start");
 	
 ######## main loop
+my $sleeptime=1;
 while (1)
 {
 	%SYS = %{(&read_configfile($CONFIGFILE))};
 	for my $gateway_name (sort(keys %GATEWAYS))
   	{
-			
 			if ($GATEWAYS{$gateway_name}{'last_run'} <= time())
 			{	
 				&log("debug","push new config to $gateway_name");
@@ -129,10 +129,16 @@ while (1)
 				$GATEWAYS{$gateway_name}{modul}->set_config(\%CONF);
 				$GATEWAYS{$gateway_name}{modul}->read_devices();
 				$GATEWAYS{$gateway_name}{'last_run'}=time()+$GATEWAYS{$gateway_name}{'intervall'};
+				&log("debug","next run in ".$GATEWAYS{$gateway_name}{'intervall'}." sec");
+				if ($sleeptime<($GATEWAYS{$gateway_name}{'intervall'}-1))
+				{
+					$sleeptime=$GATEWAYS{$gateway_name}{'intervall'}-1;
+					if ($sleeptime< 0){$sleeptime=0;}
+					&log("debug","set sleeptime to ".$sleeptime." sec");
+				}
 			}
   	}
-  	sleep (10);
-    
+  	sleep ($sleeptime);
 }
 
 	
