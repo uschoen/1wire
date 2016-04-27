@@ -66,8 +66,8 @@ sub init
 	};
 	my %outputs=%{$ARGS{'output'}};
 	my $output;
-	
 	foreach $output ( keys %outputs){
+		
 		if (ref($outputs{$output}) eq "ARRAY"){
 			### more than fon outouts
 			my @outputs2=@{$outputs{$output}};
@@ -108,7 +108,11 @@ sub init
 				$loglevel=$configOutput->{'loglevel'};
 			}
 			$configOutput->{'msgformat'}=$ARGS{'msgformat'};
-		
+		    if (exists($configOutput->{'enable'})){
+					if ($configOutput->{'enable'} ne "true"){
+						next;
+					}
+				}
 			### file
 			if ($output eq "file"){
 				$self->add(MultiLogger::File->new($configOutput),$loglevel);
