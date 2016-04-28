@@ -9,7 +9,7 @@ Example:
 <mysql1 enable="false" name="MYSQL Statistik 1" package="Connector" modul="Mysql"
 	---- configuration
 </mysql1>
-<mysql2 enable="false" name="MYSQL Statistik 1" package="Connector" modul="Mysql"
+<mysql2 enable="false" name="MYSQL Statistik 2" package="Connector" modul="Mysql"
 	---- other configuration
 </mysql2>
 
@@ -25,6 +25,7 @@ Configuration:
    	<db_name>DB NAME</db_name>					-> Database name
 	<db_table>TABLE</db_table>					-> Datbase table
 	<db_user>USER</db_user>						-> Database user
+</config>
 	
 Database mapping:
 You can map the sensor parameter to a database row. The mapping is defined in the fields section. 

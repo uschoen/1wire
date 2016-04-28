@@ -1,0 +1,30 @@
+Version 1.0 from 27.04.2016
+ 
+ The file selection is define the out to the consol. You can define one or more  outputs with 
+ divernts settings. Please disable this selection when you start the sript in daemon mode !!!!
+ 
+ <console>
+ 	.... output console 1
+ </console>
+ <console>
+ 	.... output console 2
+ </console>
+ 
+ 
+ <console>
+      <enable>true</enable>		-> disable the output 
+
+At the loglevel section, you can define which log meassages you want to store. If you define here loglevel it will 
+be overwrite the global setting. See for mor information logger_config.txt
+
+      <loglevel>
+        <dump>false</dump>
+        <alert>true</alert>
+        <critical>true</critical>
+        <debug>true</debug>
+        <emergency>true</emergency>
+        <error>true</error>
+        <info>true</info>
+        <unkown>true</unkown>
+      </loglevel>
+</console>

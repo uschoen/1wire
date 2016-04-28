@@ -1,14 +1,62 @@
 Version 1.0 from 27.04.2016
 
-<HomematicXML enable="false" name="Homematic Updater" package="Connector" modul="HomematicXML">
-			<gateways>
-      			<onewire></onewire>
-			</gateways>
-			<config>
-				<hm_url>http://IP OFF HOMEMATIC/config/xmlapi/statechange.cgi</hm_url>
-				<fields>
-					<ise_id>ise_id</ise_id>
-					<value>new_value</value>
-				</fields>
-			</config>
-    	</HomematicXML>
+The HomematicXML connector is use to push the senor data to a Homematic server via XML API.Please install first the Homematic 
+XML API in the Addons of the Homematic Server. You can mapp the sensor parameter (see onewire_config.txt / sensor parameter 
+and custommer parameter) to the Homematic devices. The homematicxml connector need a custommer field to map the data. 
+In this case we add to the onewire config at the devices the ise_id field. In this field we store the Homematic device id 
+for each sensor.
+
+You can use more then one from the same connector, if you send the data to divernts databases.
+Example:
+<homematicxml1 enable="false" name="Homematic  1" package="Connector" modul="Mysql"
+	---- configuration
+</homematicxml1>
+<homematicxml2 enable="false" name="Homematic 2" package="Connector" modul="Mysql"
+	---- other configuration
+</homematicxml2>
+
+Configuration:
+
+Configuration:
+<gateways>
+	<onewire></onewire>   ---> adding the gateway wehre send the data to this connecor
+	.... 2nd and mor gateways
+</gateways>
+
+
+<config>
+	<hm_url>http://IP OFF HOMEMATIC/config/xmlapi/statechange.cgi</hm_url> -> IP OFF HOMEMATIC=Enter the IP of the homematic CCU
+	
+Homematic mapping:
+You can map the sensor parameter to a Homematic Device ID. The mapping is defined in the fields section. 
+For avaible sensor parameter see at the onewire configuration (onewire_config.txt).
+First you have the sensor parameter name (value) in this section you put the homematic parameter.
+	
+	<fields>
+		<ise_id>ise_id</ise_id>
+		<value>new_value</value>
+	</fields>
+
+</config>
+</HomematicXML>
+
+The sript is bulid a Homematic XML http request to push the data:
+http://IP OFF HOMEMATIC/config/xmlapi/statechange.cgi?ise_id=29683&new_value=10
+
+You can read the device list from the Homematic Server with this link:
+http://IP OFF HOMEMATIC/config/xmlapi/devicelist.cgi
+-----
+<channel name="Bad_Taster_Alles_aus_Licht_an" type="32" address="LEQ0869628:1" 
+ise_id="24151" direction="SENDER" parent_device="24137" index="1" 
+group_partner="" aes_available="false" transmission_mode="DEFAULT" 
+visible="true" ready_config="true" operate="true"/>
+----
+or for Homematic system varaiables
+http://IP OFF HOMEMATIC/config/xmlapi/sysvarlist.cgi
+----
+<systemVariable name="_Display_Status" variable="1" value="1" value_list="bewegung;laden" 
+ise_id="29010" min="" max="" unit="" type="16" subtype="29" logged="false" visible="true" 
+timestamp="1461840737" value_name_0="" value_name_1=""/>
+-----
+
+

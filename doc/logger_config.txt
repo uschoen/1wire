@@ -1,63 +1,63 @@
-<loglevel>
-    <unkown>true</unkown>
-    <name>output</name>
+Version 1.0 from 27.04.2016
+
+The logging ist a flexibility tool to output the logging meassages to divernts target. AT this time we have 2 methode 
+to output the files:
+- writing to a file
+- output to the console
+
+
+
+<logging>
+Global loglevel definition. If you define no loglevel definition in the output section, it use the global settings.
+The script use following loglevel:
+dump 	-> dump auf vars 
+debug	-> every meassage, when the script isdoing somthing
+info	-> information no error or warning
+warning	-> warnings when somthing runs bad
+error	-> big problems, the script can not finsh task
+emergency -> very big problems.. the script is stopping
+unkown	-> all unkown level
+
+UNKOWN ... all level thir was not defined in the loglevel section (global or local)
+
+Exemple:
+	<loglevel>
+    	<alert>true</alert>
+        <critical>true</critical>
+        <debug>false</debug>
+        <dump>false</dump>
+        <emergency>true</emergency>
+        <error>true</error>
+        <info>true</info>
+        <unkown>true</unkown>
     </loglevel>
-    <output>
+In this case you all meassage where log, but not for the defined level: alert,critical,debug,dump,emergency,error,
+and info meassges. because <unkown> is set to true. For the definid level: alert,critical,debug,dump,emergency,error,
+and info it will use the setting for the single level:
+alert		--> true
+critical	--> true
+debug		--> false, no logging
+dump		--> false no logging
+emergency	--> true 
+error		--> true
+info		--> true
+
+
+	
+In the output section you define the individual targets. Every targets have individual settings and filter methode. 
+You can define wich Loglevel you want to output. When you nothing define it will use the global loglevel definition.
+<output>
+	<file>
+		... first file output definition see logger_file_config.txt    
+    </file>
+    .
+    .
+    .
+    <file>
+    	... X outbut file definition
+    </file>
     <console>
-      <enable>true</enable>
-      <loglevel>
-        <dump>false</dump>
-        <alert>true</alert>
-        <critical>true</critical>
-        <debug>true</debug>
-        <emergency>true</emergency>
-        <error>true</error>
-        <info>true</info>
-        <unkown>true</unkown>
-      </loglevel>
+    	... an notherr output defnition... see logger_console_config.txt
     </console>
-    <file>
-      <clearlog>false</clearlog>
-      <dir>/var/log/</dir>
-      <enable>true</enable>
-      <filename>EHC_error.log</filename>
-      <filesize>10000</filesize>
-      <holdzipfiles>3</holdzipfiles>
-      <logrotation>true</logrotation>
-      <loglevel>
-        <info>false</info>
-        <debug>false</debug>
-        <dump>false</dump>
-        <unkown>false</unkown>
-      </loglevel>
-    </file>
-     <file>
-      <clearlog>false</clearlog>
-      <dir>/var/log/</dir>
-      <enable>false</enable>
-      <filename>EHC_info.log</filename>
-      <filesize>10000</filesize>
-      <holdzipfiles>3</holdzipfiles>
-      <logrotation>true</logrotation>
-      <loglevel>
-        <alert>true</alert>
-        <critical>true</critical>
-        <debug>false</debug>
-        <dump>false</dump>
-        <emergency>true</emergency>
-        <error>true</error>
-        <info>true</info>
-        <unkown>true</unkown>
-      </loglevel>
-    </file>
-    <file>
-      <clearlog>false</clearlog>
-      <dir>/var/log/</dir>
-      <enable>false</enable>
-      <filename>EHC_dump.log</filename>
-      <filesize>10000</filesize>
-      <holdzipfiles>3</holdzipfiles>
-      <logrotation>true</logrotation>
-    </file>
-    </output>
-  </logging>
+</output>
+</logging>
