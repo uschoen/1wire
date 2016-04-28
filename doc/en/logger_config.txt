@@ -1,0 +1,67 @@
+Version 1.0 from 27.04.2016
+Please see for more information at this artikel:
+http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry/
+http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry-software-loesung/
+http://blog.johjoh.de/
+
+The logging ist a flexibility tool to output the logging meassages to divernts target. AT this time we have 2 methode 
+to output the files:
+- writing to a file
+- output to the console
+
+
+
+<logging>
+Global loglevel definition. If you define no loglevel definition in the output section, it use the global settings.
+The script use following loglevel:
+dump 	-> dump auf vars 
+debug	-> every meassage, when the script isdoing somthing
+info	-> information no error or warning
+warning	-> warnings when somthing runs bad
+error	-> big problems, the script can not finsh task
+emergency -> very big problems.. the script is stopping
+unkown	-> all unkown level
+
+UNKOWN ... all level thir was not defined in the loglevel section (global or local)
+
+Exemple:
+	<loglevel>
+    	<alert>true</alert>
+        <critical>true</critical>
+        <debug>false</debug>
+        <dump>false</dump>
+        <emergency>true</emergency>
+        <error>true</error>
+        <info>true</info>
+        <unkown>true</unkown>
+    </loglevel>
+In this case you all meassage where log, but not for the defined level: alert,critical,debug,dump,emergency,error,
+and info meassges. because <unkown> is set to true. For the definid level: alert,critical,debug,dump,emergency,error,
+and info it will use the setting for the single level:
+alert		--> true
+critical	--> true
+debug		--> false, no logging
+dump		--> false no logging
+emergency	--> true 
+error		--> true
+info		--> true
+
+
+	
+In the output section you define the individual targets. Every targets have individual settings and filter methode. 
+You can define wich Loglevel you want to output. When you nothing define it will use the global loglevel definition.
+<output>
+	<file>
+		... first file output definition see logger_file_config.txt    
+    </file>
+    .
+    .
+    .
+    <file>
+    	... X outbut file definition
+    </file>
+    <console>
+    	... an notherr output defnition... see logger_console_config.txt
+    </console>
+</output>
+</logging>

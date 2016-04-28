@@ -1,0 +1,36 @@
+ Version 1.0 from 27.04.2016
+Please see for more information at this artikel:
+http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry/
+http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry-software-loesung/
+http://blog.johjoh.de/
+
+ The file selection is define the out to a file. You can define one or more file outputs with 
+ divernts settings.
+ <file>
+ 	.... output file 1
+ </file>
+ <file>
+ 	.... output file 2
+ </file>
+ 
+ for every file you can set individual settings:
+ <file>
+      <clearlog>false</clearlog>		-> clear logfile at the start=true
+      <dir>/var/log/</dir>				-> dir to write the logfiles (!!! / at the end of the path !!!)
+      <enable>true</enable>				-> output enable
+      <filename>EHC_error.log</filename>	-> Logfilename
+      <filesize>10000</filesize>			-> Logsize befor zip (logrotation have set to true)
+      <holdzipfiles>3</holdzipfiles>		-> how many zip file hold befor delte the files
+      <logrotation>true</logrotation>		-> enable to zip the files when the file have a size of --filezize---
+   
+At the loglevel section, you can define which log meassages you want to store. If you define here loglevel it will 
+be overwrite the global setting. See for mor information logger_config.txt
+      <loglevel>
+        <info>false</info>
+        <debug>false</debug>
+        <dump>false</dump>
+        <unkown>false</unkown>
+      </loglevel>
+</file>
+
+ 

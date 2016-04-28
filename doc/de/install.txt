@@ -1,6 +1,12 @@
-Version 1.0 from 27.04.2016
+Version 1.0 from 27.04.2016. 
+Please see for more information at this artikel:
+http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry/
+http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry-software-loesung/
+http://blog.johjoh.de/
 
-Installation of EasyHomeControl. (EHC)
+
+
+Installation of EasyHomeControl. (EHC). 
 First install some software pakgage
 ->apt-get install libxml-simple-perl libarchive-zip-perl
 

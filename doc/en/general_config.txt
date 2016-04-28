@@ -1,0 +1,40 @@
+Version 1.0 from 27.04.2016
+Please see for more information at this artikel:
+http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry/
+http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry-software-loesung/
+http://blog.johjoh.de/
+
+The EasyHomeControl gateway script is part of a other projekt. the configuration is a xml base config file. 
+To understand the configuratio, open the  example config file (config_example.txt), and read the individual
+dokumantion for each section. 
+
+To start up the script use ./EHCgateway.pl --configfile [path of the file] --daemon [true||false].
+you have to start the script with 2 option.
+
+--configfile [path of the file] ---->insert the path and name (from root dir) of the configuration file like (/usr/local/easyHC/conf/config.txt
+--daemon [true||false] ----> if you want to run as daemon use true
+
+you have following section in the config file.
+<opt>
+	<daemon>true</daemon>
+	<path>/usr/local/easyHC</path>
+	<pidfile>/var/run/EHCgateway.pid</pidfile>
+	<gateways>
+	... see at the gateway_config.txt
+	</gateways>
+	<connectors>
+	...	see at the connectors_config.txt
+	</connectors>
+   <logging>
+   ... see at the logger_config.txt
+   </logging> 
+</opt>
+
+<daemon>true</daemon>
+the option --daemon overwrite the config setting. if set daemon to true, the script runs in backround
+
+<path>/usr/local/easyHC</path>
+the path of the script
+
+<pidfile>/var/run/EHCgateway.pid</pidfile>
+pidfile of the EHCgetway, must the the same path like the init.d script

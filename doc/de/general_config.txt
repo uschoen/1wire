@@ -1,4 +1,8 @@
 Version 1.0 from 27.04.2016
+Please see for more information at this artikel:
+http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry/
+http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry-software-loesung/
+http://blog.johjoh.de/
 
 The EasyHomeControl gateway script is part of a other projekt. the configuration is a xml base config file. 
 To understand the configuratio, open the  example config file (config_example.txt), and read the individual

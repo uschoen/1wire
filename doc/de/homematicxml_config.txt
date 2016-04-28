@@ -1,4 +1,8 @@
 Version 1.0 from 27.04.2016
+Please see for more information at this artikel:
+http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry/
+http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry-software-loesung/
+http://blog.johjoh.de/
 
 The HomematicXML connector is use to push the senor data to a Homematic server via XML API.Please install first the Homematic 
 XML API in the Addons of the Homematic Server. You can mapp the sensor parameter (see onewire_config.txt / sensor parameter 
