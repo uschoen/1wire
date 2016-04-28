@@ -1,29 +1,23 @@
-<HomematicXML enable="false" name="Homematic Updater" package="Connector" modul="HomematicXML">
-			<gateways>
-      			<onewire></onewire>
-			</gateways>
-			<config>
-				<hm_url>http://IP OFF HOMEMATIC/config/xmlapi/statechange.cgi</hm_url>
-				<fields>
-					<ise_id>ise_id</ise_id>
-					<value>new_value</value>
-				</fields>
-			</config>
-    	</HomematicXML>
- 		<Mysql enable="false" name="MYSQL Statistik" package="Connector" modul="Mysql">
- 		<gateways>
-      		<onewire></onewire>
-     	</gateways>
- 		<config>
-			<db_host>IP OFF MYSQL DATABASE</db_host>
-      		<db_password>PASSWORD</db_password>
-      		<db_name>DB NAME</db_name>
-      		<db_table>TABLE</db_table>
-      		<db_user>USER</db_user>
-      		<fields>
-        		<device_id>device</device_id>
-        		<timestamp>timestamp</timestamp>
-        		<value>value</value>
-      		</fields>
-		</config>
-    	</Mysql>
+Version 1.0 from 27.04.2016
+
+The connector transport the sensor data to other systems, like database or Homematic CCU. 
+AT this timewe have 2 connecors available. 
+-HomematicXML Updater -> see homematicxml_config.txt
+-MYSQL Database  -> see mysql_config.txt
+
+Every connector have a uniqued name (CONNECTOR_NAME). If you need more then one connector from each typ 
+(like 2 mysql connections) you can add the typ tow times with divernts configurations.
+Parameter:
+enable -> enable the connecor if true/ disable if false
+name -> given name from the connecor
+package -> Connecor of a perl package
+modul -> Perl modul name
+ 
+<connctor>
+	<CONNECTOR_NAME enable="false" name="Homematic Updater" package="Connector" modul="HomematicXML">
+		...			see at the connector discription for mysql_config.txt or HomematicXML_config.txt
+    </CONNECTOR_NAME>
+ 	<2_CONNECTOR_NAME>
+ 		...
+ 	</2_CONNECTOR_NAME> 	
+ </connector>

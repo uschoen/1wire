@@ -1,3 +1,5 @@
+Version 1.0 from 27.04.2016
+
 Installation of EasyHomeControl. (EHC)
 First install some software pakgage
 ->apt-get install libxml-simple-perl libarchive-zip-perl
@@ -44,4 +46,16 @@ Next copy the script to /etc/init.d
 Next changing the config file in /usr/local/easyHC/conf. Copy the config.exemple.xml to config.xml
 ->cp /usr/local/easyHC/conf/config.exempel.xml /usr/local/easyHC/conf/config.xml
 now you can change the config file. For more info se in the doc directory. Start with general_config.txt file.
+
+If you have install the init.d script you can start the script with:
+sudo service EHCgateway start 
+and stop it with
+sudo service EHCgateway stop
+
+if ou use to test the script you can start it with consol output (see logging configuration to enable consol logging).
+use:
+cd /usr/local/easyHC
+sudo ./EHCgateway.pl --configfile /usr/local/easyHC/conf/config.xml --daemon false
+stop with CONTROL C.
+
 

@@ -1,0 +1,50 @@
+Version 1.0 from 27.04.2016
+
+The MYSQL Connecor is use to push the senor data to a mysql database. You can mapp the sensor parameter 
+(see onewire_config.txt / sensor parameter and custommer parameter) to the database rows. You can use 
+this for statistic or some other to store the information.
+
+You can use more then one from the same connector, if you send the data to divernts databases.
+Example:
+<mysql1 enable="false" name="MYSQL Statistik 1" package="Connector" modul="Mysql"
+	---- configuration
+</mysql1>
+<mysql2 enable="false" name="MYSQL Statistik 1" package="Connector" modul="Mysql"
+	---- other configuration
+</mysql2>
+
+Configuration:
+<gateways>
+	<onewire></onewire>   ---> adding the gateway wehre send the data to this connecor
+	.... 2nd and mor gateways
+</gateways>
+
+<config>
+	<db_host>IP OFF MYSQL DATABASE</db_host>	-> IP of the MYSQL Database
+   	<db_password>PASSWORD</db_password>			-> Passwort of the Dabase user
+   	<db_name>DB NAME</db_name>					-> Database name
+	<db_table>TABLE</db_table>					-> Datbase table
+	<db_user>USER</db_user>						-> Database user
+	
+Database mapping:
+You can map the sensor parameter to a database row. The mapping is defined in the fields section. 
+For avaible sensor parameter see at the onewire configuration (onewire_config.txt).
+First you have the sensor parameter name (divice_id) in this section you put the row name of the 
+database (device). 
+
+	<fields>
+   		<device_id>device</device_id>
+       	<timestamp>timestamp</timestamp>
+       	<value>value</value>
+   	</fields>
+   	
+For this case you have following mapping
+
+Senor Parameter		-> 	Database row
+------------------------------------------
+device_id			->	device
+timestamp			->	timestamp
+value				->	value
+
+</config>
+   

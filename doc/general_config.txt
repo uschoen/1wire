@@ -1,3 +1,5 @@
+Version 1.0 from 27.04.2016
+
 The EasyHomeControl gateway script is part of a other projekt. the configuration is a xml base config file. 
 To understand the configuratio, open the  example config file (config_example.txt), and read the individual
 dokumantion for each section. 

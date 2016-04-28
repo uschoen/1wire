@@ -1,0 +1,68 @@
+Version 1.0 from 27.04.2016
+
+Configuration for the onewire gateway modul.
+
+The onewire modul is reading the connected senor data and send for each sensor the data to a connector. You can use divernts connectors for each geateway.
+Available  connectors are:
+--HomematicXML
+--Mysql
+for more more information of the connectors see at the connectors config.txt.
+
+The onewire configuration have 2 sections
+First you define the global pararmeter:
+----
+<onewire name="onewire temperatur sensor" package="Gateway" modul="onewire" typ="intervall" time="60">
+	<config>
+	...
+	</config>
+</onewire>
+----
+for this section see at the gateway_config.txt file.
+
+<config>
+	<path>/sys/bus/w1/devices/w1_bus_master1/</path>
+	<tempDiv>0.5</tempDiv>
+	<temp_configfile>/usr/local/easyHC/conf/activ_device.xml</temp_configfile>
+		<device_list>
+		...
+		</device_list>
+</config
+
+path 
+-> path of the script
+tempDiv 
+-> 	hysteresis of the sensor. The sensor have a change >tempDiv befor it send the new data.
+temp_configfile  
+->place of the file for find new one wire sensor. The script is scanning continuous the sensors. 
+if 	find new sensor or sensor was disconnect, it create a new device list file with this name.
+
+In the 	device list you find all temp sensor with the device id.The script is writing template  
+device file with all connectedt sensors. The file name is define with the temp_configfile parameter.
+-----------			
+<device_list>
+	<N28-0115913432ff>
+		<available>1</available>
+		<device_id>28-0115913432ff</device_id>
+		<ise_id>29680</ise_id>
+		<device_name>test</device_name>
+		<enable>1</enable>
+		<timestamp>1461681823</timestamp>
+		<value>0</value>
+	</N28-0115913432ff>
+	</N27-0117726232ff>
+		.....
+	</N27-0117726232ff>
+</device_list>
+-----------
+Each sensor have a serial number. For each sensor is start the section with <N+SESNOR_ID>. The script is adding for each sensor folling parameter
+available -> 1 if the sensor connected / 0 if discconected
+device_id -> the serial number of the device
+device_name -> free given name (the script is adding with N+SENSOR_ID
+enable -> 1 if you want to read the sensor data / 0 ignore this entry
+timestamp -> unix timestamp for the last update of the value
+value -> sensor data/temparture
+
+you can add custommer parameter. This parameter you can use for the connectors. See at the connector discription.
+ise_id -> mapping the sensor to a homematic device id for the homematicxml connector.
+
+

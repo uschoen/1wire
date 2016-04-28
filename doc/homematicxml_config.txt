@@ -1,0 +1,14 @@
+Version 1.0 from 27.04.2016
+
+<HomematicXML enable="false" name="Homematic Updater" package="Connector" modul="HomematicXML">
+			<gateways>
+      			<onewire></onewire>
+			</gateways>
+			<config>
+				<hm_url>http://IP OFF HOMEMATIC/config/xmlapi/statechange.cgi</hm_url>
+				<fields>
+					<ise_id>ise_id</ise_id>
+					<value>new_value</value>
+				</fields>
+			</config>
+    	</HomematicXML>
