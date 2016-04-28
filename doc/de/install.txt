@@ -1,67 +1,75 @@
 Version 1.0 from 27.04.2016. 
-Please see for more information at this artikel:
+Für mehr Informationen siehe hier.
 http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry/
 http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry-software-loesung/
 http://blog.johjoh.de/
 
 
 
-Installation of EasyHomeControl. (EHC). 
-First install some software pakgage
-->apt-get install libxml-simple-perl libarchive-zip-perl
+Installation von EasyHomeControl. (EHC). 
+Erst müssen einige Pakete für das Perl Modul XML::Simple installieren.
 
-download from githup the zip file.
-->cd /tmp
-->wget https://github.com/uschoen/1wire/archive/master.zip
-Crate a new dir for EHCgateway
-->sudo mkdir /usr/local/easyHC
-Unzip the file
-->unzip master.zip 
-make it excuteable
-->chmod -R 775 1wire-master/
-Change to 1wire-master dir
-->cd 1wire-master /usr/local/easyHC
-Move the file to 
-->sudo mv * /usr/local/easyHC
+-->sudo apt-get install libxml-simple-perl libarchive-zip-perl
 
-Now you can install some perl pakage with cpan
-->sudo cpan
-->install XML::Simple strict warnings Getopt::Long Data::Dumper POSIX LWP::Simple
+Dann die Files von Githup herunterladen:
 
-if you use the MYSQL connector
-->sudo cpan
-->install DBI DBD::mysql
+-->cd /tmp
+-->wget https://github.com/uschoen/1wire/archive/master.zip
 
-If you want  to start  via init.d, you can use the script in /doc/service/EHCgateway
+Ein neues Verzeichnis erstellen für das Script und entpacken . Dann ausführbar machen. Dann die Files ins Verzeichnis verschieben.
 
-/// if you use othe path and names please change it in the init.d start script.
--------------
-.
-DAEMON_PATH="/usr/local/easyHC"											#installation path
-DAEMON=$DAEMON_PATH/EHCgateway.pl										#Script name
-DAEMONOPTS="--configfile $DAEMON_PATH/conf/config.xml --daemon true"	#start arguments, --configfile= plce of the config  file, --daemon = true run as demo
+-->sudo mkdir /usr/local/easyHC
+-->sudo unzip master.zip
+-->sudo chmod -R 775 1wire-master/
+-->cd 1wire-master /usr/local/easyHC
+-->sudo mv * /usr/local/easyHC
 
-NAME=EHCgateway															#programm name and pid file name
-.
----------------
-Next copy the script to /etc/init.d
-->sudo cp doc/service/EHCgateway /etc/init.d/EHCgateway
-->sudo chmod 775 /etc/init.d/EHCgateway
-->sudo update-rc.d EHCgateway  defaults
+Über CPAN einige Pakete nach installieren.
 
-Next changing the config file in /usr/local/easyHC/conf. Copy the config.exemple.xml to config.xml
-->cp /usr/local/easyHC/conf/config.exempel.xml /usr/local/easyHC/conf/config.xml
-now you can change the config file. For more info se in the doc directory. Start with general_config.txt file.
+-->sudo cpan
+-->install XML::Simple strict warnings Getopt::Long Data::Dumper POSIX LWP::Simple
 
-If you have install the init.d script you can start the script with:
-sudo service EHCgateway start 
-and stop it with
-sudo service EHCgateway stop
+Wenn der MSQL Connector verwendet wird muss noch zusätzlich das DBI und DBD::mysql Paket installiert werden.
 
-if ou use to test the script you can start it with consol output (see logging configuration to enable consol logging).
-use:
-cd /usr/local/easyHC
-sudo ./EHCgateway.pl --configfile /usr/local/easyHC/conf/config.xml --daemon false
-stop with CONTROL C.
+-->sudo cpan
+-->install DBI DBD::mysql
+
+Im Verzeichnis /doc/service liegt das init.d Script. ggf müssen dort noch einige Anpassungen gemacht werden, wenn andere Pfade verwendet wurden.
+ ...
+ DAEMON_PATH="/usr/local/easyHC" #installation path
+ DAEMON=$DAEMON_PATH/EHCgateway.pl #Script name
+ DAEMONOPTS="--configfile $DAEMON_PATH/conf/config.xml --daemon true" #start arguments, --configfile= plce of the config file, --daemon = true run as demo
+
+NAME=EHCgateway #programm name and pid file name
+ ....
+
+Dann das Script kopieren ins init.d Verzeichnis.
+
+-->sudo chmod 775 /etc/init.d/EHCgateway
+-->sudo update-rc.d EHCgateway defaults
+
+Danach die config_example.xml kopieren.
+
+-->cp /usr/local/easyHC/conf/config.exempel.xml /usr/local/easyHC/conf/config.xml
+
+Nun kann die config.xml Datei angepast werden. Die einzelnen Bereiche in der XML Datei
+werden in den folgenden beschrieben. gerneral_config.txt
+
+Das Script kann dann über folgenden Befehl gestartet werden:
+
+-->sudo service EHCgateway start
+
+und gestoppt mit:
+
+-->sudo service EHCgateway stop
+
+WICHTIG, wenn das Script als Daemon läuft sollte das Logging für die Console ausgeschaltet werden.
+
+Von Hand kann es so gestartet werden
+
+-->cd /usr/local/easyHC
+-->sudo ./EHCgateway.pl --configfile /usr/local/easyHC/conf/config.xml --daemon false
+
+
 
 

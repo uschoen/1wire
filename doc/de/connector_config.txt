@@ -1,25 +1,25 @@
 Version 1.0 from 27.04.2016
-Please see for more information at this artikel:
+Für mehr Informationen siehe hier.
 http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry/
 http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry-software-loesung/
 http://blog.johjoh.de/
 
-The connector transport the sensor data to other systems, like database or Homematic CCU. 
-AT this timewe have 2 connecors available. 
--HomematicXML Updater -> see homematicxml_config.txt
--MYSQL Database  -> see mysql_config.txt
+Die Connectoren leiten die Sensor Daten zu diversen anderen zielen weiter. Zur zeit sind 2 Connectoen 
+verfügbar
+-HomematicXML Updater -> siehe homematicxml_config.txt
+-MYSQL Database  -> siehe mysql_config.txt
 
-Every connector have a uniqued name (CONNECTOR_NAME). If you need more then one connector from each typ 
-(like 2 mysql connections) you can add the typ tow times with divernts configurations.
+Jeder Connecor hat einen einmaligen frei zuvergebenen Namen. Wenn man einen Connector 2 mal benötigt 
+mit 2 verschiedenen Konfigurationen (verbindungen zu 2 verschiedenen Datenbanken)
 Parameter:
-enable -> enable the connecor if true/ disable if false
-name -> given name from the connecor
-package -> Connecor of a perl package
-modul -> Perl modul name
+enable -> aktiviert den connector wenn true eingetragen ist
+name -> frei gewählter Name/Bezeichnung
+package -> "Connecor" Paket name für Perl
+modul -> Perl Modul Name
  
 <connctor>
 	<CONNECTOR_NAME enable="false" name="Homematic Updater" package="Connector" modul="HomematicXML">
-		...			see at the connector discription for mysql_config.txt or HomematicXML_config.txt
+		...			siehe in der Konfiguration mysql_config.txt oder HomematicXML_config.txt
     </CONNECTOR_NAME>
  	<2_CONNECTOR_NAME>
  		...
