@@ -12,6 +12,23 @@ First install some software pakgage
 --> sudo apt-get upgrade
 --> apt-get install libxml-simple-perl libarchive-zip-perl
 
+Now you have to activate the onewire connection.
+change the file /etc/modules and insert
+--> sudo nano /etc/modules
+...
+w1-gpio pullup=1
+w1-therm
+...
+
+change the file  /boot/config.txt and add the line.
+--> sudo nano  nano /boot/config.txt
+....
+ dtoverlay=w1-gpio-pullup,gpiopin=4,extpullup=on
+....
+
+gpiopin= is the use GPIO PIN.
+
+
 download from githup the zip file.
 --> cd /tmp
 --> wget https://github.com/uschoen/1wire/archive/master.zip
@@ -36,6 +53,7 @@ Now you can install some perl pakage with cpan
 --> install XML::Simple strict warnings Getopt::Long Data::Dumper POSIX LWP::Simple Archive::Zip
 
 if you use the MYSQL connector
+--> sudo apt-get install libdbd-mysql-perl libmysqlclient-dev
 --> sudo cpan
 --> install DBI DBD::mysql
 
@@ -52,12 +70,12 @@ NAME=EHCgateway															#programm name and pid file name
 .
 ---------------
 Next copy the script to /etc/init.d
-->sudo cp doc/service/EHCgateway /etc/init.d/EHCgateway
-->sudo chmod 775 /etc/init.d/EHCgateway
-->sudo update-rc.d EHCgateway  defaults
+--> sudo cp /usr/local/easyHC/doc/service/EHCgateway /etc/init.d/EHCgateway
+--> sudo chmod 775 /etc/init.d/EHCgateway
+--> sudo update-rc.d EHCgateway  defaults
 
 Next changing the config file in /usr/local/easyHC/conf. Copy the config.exemple.xml to config.xml
-->cp /usr/local/easyHC/conf/config.exempel.xml /usr/local/easyHC/conf/config.xml
+--> sudo cp /usr/local/easyHC/conf/config.exempel.xml /usr/local/easyHC/conf/config.xml
 now you can change the config file. For more info se in the doc directory. Start with general_config.txt file.
 
 If you have install the init.d script you can start the script with:
@@ -67,7 +85,7 @@ sudo service EHCgateway stop
 
 if ou use to test the script you can start it with consol output (see logging configuration to enable consol logging).
 use:
-cd /usr/local/easyHC
+--> cd /usr/local/easyHC
 sudo ./EHCgateway.pl --configfile /usr/local/easyHC/conf/config.xml --daemon false
 stop with CONTROL C.
 

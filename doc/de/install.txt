@@ -12,6 +12,23 @@ Erst müssen einige Pakete für das Perl Modul XML::Simple installieren.
 --> sudo apt-get upgrade
 --> sudo apt-get install libxml-simple-perl libarchive-zip-perl
 
+Danach muss noch die oewire Schnittstelle aktiviert werden.
+in der datei /etc/modules
+--> sudo nano /etc/modules
+...
+w1-gpio pullup=1
+w1-therm
+...
+eintragen. 
+
+in der Datei  /boot/config.txt dann noch die config für die onewire Schnistelle hinterlegen
+--> sudo nano  nano /boot/config.txt
+....
+ dtoverlay=w1-gpio-pullup,gpiopin=4,extpullup=on
+....
+
+gpiopin= der verwendetet GPIO PIN.
+
 Dann die Files von Githup herunterladen:
 
 --> cd /tmp
@@ -32,6 +49,7 @@ Ein neues Verzeichnis erstellen für das Script und entpacken . Dann ausführbar m
 
 Wenn der MSQL Connector verwendet wird muss noch zusätzlich das DBI und DBD::mysql Paket installiert werden.
 
+--> sudo apt-get install libdbd-mysql-perl  libmysqlclient-dev
 --> sudo cpan
 --> install DBI DBD::mysql
 
@@ -45,31 +63,31 @@ NAME=EHCgateway #programm name and pid file name
  ....
 
 Dann das Script kopieren ins init.d Verzeichnis.
-
+-->sudo cp /usr/local/easyHC/doc/service/EHCgateway /etc/init.d/EHCgateway
 -->sudo chmod 775 /etc/init.d/EHCgateway
 -->sudo update-rc.d EHCgateway defaults
 
 Danach die config_example.xml kopieren.
 
--->cp /usr/local/easyHC/conf/config.exempel.xml /usr/local/easyHC/conf/config.xml
+--> sudo cp /usr/local/easyHC/conf/config.exempel.xml /usr/local/easyHC/conf/config.xml
 
 Nun kann die config.xml Datei angepast werden. Die einzelnen Bereiche in der XML Datei
 werden in den folgenden beschrieben. gerneral_config.txt
 
 Das Script kann dann über folgenden Befehl gestartet werden:
 
--->sudo service EHCgateway start
+--> sudo service EHCgateway start
 
 und gestoppt mit:
 
--->sudo service EHCgateway stop
+--> sudo service EHCgateway stop
 
 WICHTIG, wenn das Script als Daemon läuft sollte das Logging für die Console ausgeschaltet werden.
 
 Von Hand kann es so gestartet werden
 
--->cd /usr/local/easyHC
--->sudo ./EHCgateway.pl --configfile /usr/local/easyHC/conf/config.xml --daemon false
+--> cd /usr/local/easyHC
+--> sudo ./EHCgateway.pl --configfile /usr/local/easyHC/conf/config.xml --daemon false
 
 
 
