@@ -34,7 +34,10 @@ for changlog se /doc/CHANGELOG.txt
 
   This copyright notice MUST APPEAR in all copies of the script!
 
-  Homepage:  http://fhem.de
+  Homepage:  
+  			http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry/
+			http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry-software-loesung/
+			http://blog.johjoh.de/
 
  $Id: EHCGateway.pl  2016-01-01 07:33:35Z ullrich schoen $
 ################################################################

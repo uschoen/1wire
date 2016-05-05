@@ -4,35 +4,36 @@ http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspber
 http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry-software-loesung/
 http://blog.johjoh.de/
 
-
+Das Script ist getestet mit Perl Version v5.20.2.
 
 Installation von EasyHomeControl. (EHC). 
 Erst müssen einige Pakete für das Perl Modul XML::Simple installieren.
-
--->sudo apt-get install libxml-simple-perl libarchive-zip-perl
+--> sudo apt-get update
+--> sudo apt-get upgrade
+--> sudo apt-get install libxml-simple-perl libarchive-zip-perl
 
 Dann die Files von Githup herunterladen:
 
--->cd /tmp
--->wget https://github.com/uschoen/1wire/archive/master.zip
+--> cd /tmp
+--> wget https://github.com/uschoen/1wire/archive/master.zip
 
 Ein neues Verzeichnis erstellen für das Script und entpacken . Dann ausführbar machen. Dann die Files ins Verzeichnis verschieben.
 
--->sudo mkdir /usr/local/easyHC
--->sudo unzip master.zip
--->sudo chmod -R 775 1wire-master/
--->cd 1wire-master /usr/local/easyHC
--->sudo mv * /usr/local/easyHC
+--> sudo mkdir /usr/local/easyHC
+--> sudo unzip master.zip
+--> sudo chmod -R 775 1wire-master/
+--> cd 1wire-master /usr/local/easyHC
+--> sudo mv * /usr/local/easyHC
 
 Über CPAN einige Pakete nach installieren.
 
--->sudo cpan
--->install XML::Simple strict warnings Getopt::Long Data::Dumper POSIX LWP::Simple
+--> sudo cpan
+--> install XML::Simple strict warnings Getopt::Long Data::Dumper POSIX LWP::Simple Archive::Zip
 
 Wenn der MSQL Connector verwendet wird muss noch zusätzlich das DBI und DBD::mysql Paket installiert werden.
 
--->sudo cpan
--->install DBI DBD::mysql
+--> sudo cpan
+--> install DBI DBD::mysql
 
 Im Verzeichnis /doc/service liegt das init.d Script. ggf müssen dort noch einige Anpassungen gemacht werden, wenn andere Pfade verwendet wurden.
  ...
