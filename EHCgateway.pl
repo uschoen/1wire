@@ -28,7 +28,10 @@ $| = 1;
 #
 #  This copyright notice MUST APPEAR in all copies of the script!
 #
-#  Homepage:  http://fhem.de
+#  Homepage:
+# http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry/
+# http://blog.johjoh.de/onewire-temperatur-sensoren-fuer-die-homematic-ccu-raspberry-software-loesung/
+# http://blog.johjoh.de/
 #
 # $Id: EHCGateway.pl  2016-01-01 08:43:05Z ullrich schoen $
 
@@ -46,7 +49,7 @@ use constant false => 0;
 
 ####### Globale variable
 my $PATH;
-BEGIN{$PATH="notset"}
+BEGIN{$PATH="/usr/local/easyHC"}
 use vars qw(%SYS);				# Systems configuration
 our $CONFIGFILE="";		# config file name
 use vars qw($DAEMON);				# run as damon ?
@@ -55,18 +58,9 @@ use vars qw(%CONNECTORS);			# connectors objects
 use vars qw(%GATEWAYS);			# connectors objects
 use vars qw(%DATASOURCE);			# sensor kodule
 
-####### include custommer module
-use lib "./modul";
-use MultiLogger::Dispatcher;
-use Raspberry::onewire;
-
-
 ###### Default value for variables
-$CONFIGFILE="/mnt/nas01/entwicklung/onewire/1wire/conf/config.xml";
+$CONFIGFILE="/usr/local/easyHC/conf/config.xml";
 $DAEMON="UNKOWN";			
-
-#######
-
 
 ####### If started as root, and there is a ehcuser user in the /etc/passwd, su to it
 su_to_ehcuser();
@@ -81,6 +75,11 @@ or die "Usage: $0 --configfile [absolute path to the configfile] --daemon [true|
 
 ####### switch dto root dir "/"
 chdir "/";
+####### include custommer module
+$PATH=$SYS{'path'};
+use lib $PATH."/modul";
+use MultiLogger::Dispatcher;
+use Raspberry::onewire;
 
 ####### overwirte config with options
 $SYS{'daemon'}=$DAEMON if (($DAEMON eq "true") or ($DAEMON eq "false"));
