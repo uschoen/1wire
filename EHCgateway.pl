@@ -42,14 +42,14 @@ use POSIX qw(setuid setgid);
 use Getopt::Long qw(GetOptions);
 use Data::Dumper;
 use XML::Simple;
+use FindBin qw($Bin);
+use lib "$Bin/modul";
 
 ####### constant 
 use constant true => 1;
 use constant false => 0;
 
 ####### Globale variable
-my $PATH;
-BEGIN{$PATH="/usr/local/easyHC"}
 use vars qw(%SYS);				# Systems configuration
 our $CONFIGFILE="";		# config file name
 use vars qw($DAEMON);				# run as damon ?
@@ -76,8 +76,6 @@ or die "Usage: $0 --configfile [absolute path to the configfile] --daemon [true|
 ####### switch dto root dir "/"
 chdir "/";
 ####### include custommer module
-$PATH=$SYS{'path'};
-use lib $PATH."/modul";
 use MultiLogger::Dispatcher;
 use Raspberry::onewire;
 
